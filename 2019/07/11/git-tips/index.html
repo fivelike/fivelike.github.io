@@ -131,11 +131,6 @@
     <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
 
   </li>
-        <li class="menu-item menu-item-about">
-
-    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a>
-
-  </li>
         <li class="menu-item menu-item-categories">
 
     <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
@@ -144,6 +139,11 @@
         <li class="menu-item menu-item-archives">
 
     <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a>
 
   </li>
   </ul>
@@ -194,12 +194,6 @@
           <span class="site-state-item-count">6</span>
           <span class="site-state-item-name">posts</span>
         </a>
-      </div>
-      <div class="site-state-item site-state-categories">
-            <a href="/categories/">
-          
-        <span class="site-state-item-count">3</span>
-        <span class="site-state-item-name">categories</span></a>
       </div>
   </nav>
 </div>
@@ -294,15 +288,6 @@
         <span class="post-meta-item-text">Edited on</span>
         <time title="Modified: 2019-07-12 19:58:22" itemprop="dateModified" datetime="2019-07-12T19:58:22+08:00">2019-07-12</time>
       </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">In</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/Git/" itemprop="url" rel="index"><span itemprop="name">Git</span></a>
-        </span>
-    </span>
 
   
 </div>
@@ -332,7 +317,7 @@
 <li>每次修改，如果不用<code>git add</code>到暂存区，那就不会加入到<code>commit</code>中。</li>
 </ul>
 <h2 id="撤销修改"><a href="#撤销修改" class="headerlink" title="撤销修改"></a>撤销修改</h2><ul>
-<li>case1：丢弃工作区的修改  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git checkout -- file</span><br></pre></td></tr></table></figure></li>
+<li>case1：丢弃工作区的修改<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git checkout -- file</span><br></pre></td></tr></table></figure></li>
 <li>case2: 不但改乱了工作去的某文件内容，并添加到了暂存区，想丢弃修改，分两步，第一步用<code>git reset HEAD &lt;file&gt;</code>,就回到了case1;第二步按case1操作</li>
 <li>case3：已经提交了不适合的修改到版本库，想要撤销本次提交，参考版本回退，前提是没有推送到远程库。</li>
 </ul>
@@ -343,7 +328,7 @@
 </ul>
 <h2 id="添加远程仓库"><a href="#添加远程仓库" class="headerlink" title="添加远程仓库"></a>添加远程仓库</h2><ul>
 <li>在远程创建一个仓库</li>
-<li>git remote add origin <a href="mailto:&#103;&#x69;&#116;&#x40;&#x67;&#105;&#x74;&#104;&#x75;&#98;&#46;&#99;&#111;&#x6d;">&#103;&#x69;&#116;&#x40;&#x67;&#105;&#x74;&#104;&#x75;&#98;&#46;&#99;&#111;&#x6d;</a>:username/repo.git 关联远程仓库</li>
+<li>git remote add origin <a href="mailto:&#103;&#x69;&#x74;&#x40;&#103;&#105;&#x74;&#104;&#x75;&#98;&#x2e;&#x63;&#111;&#x6d;">&#103;&#x69;&#x74;&#x40;&#103;&#105;&#x74;&#104;&#x75;&#98;&#x2e;&#x63;&#111;&#x6d;</a>:username/repo.git 关联远程仓库</li>
 <li>git push -u origin master 第一次推送master分支的所有内容</li>
 <li>此后，每次本地提交后，只要有必要，就可以使用命令<code>git push origin master</code>推送最新修改</li>
 </ul>
