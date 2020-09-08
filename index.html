@@ -1,0 +1,980 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.1.1">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.14.0/css/all.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css">
+
+<script class="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Mist","version":"8.0.0","exturl":false,"sidebar":{"position":"right","display":"post","padding":35,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}};
+  </script>
+
+  <meta name="description" content="Whatever is worth doing is worth doing well.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Fivelike">
+<meta property="og:url" content="http://example.com/index.html">
+<meta property="og:site_name" content="Fivelike">
+<meta property="og:description" content="Whatever is worth doing is worth doing well.">
+<meta property="og:locale" content="en_US">
+<meta property="article:author" content="Fivelike">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="http://example.com/">
+
+
+<script class="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : true,
+    isPost : false,
+    lang   : 'en'
+  };
+</script>
+
+  <title>Fivelike</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  body { margin-top: 2rem; }
+
+  .use-motion .menu-item,
+  .use-motion .sidebar,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header {
+    visibility: visible;
+  }
+
+  .use-motion .header,
+  .use-motion .site-brand-container .toggle,
+  .use-motion .footer { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle,
+  .use-motion .custom-logo-image {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line {
+    transform: scaleX(1);
+  }
+
+  .search-pop-overlay, .sidebar-nav { display: none; }
+  .sidebar-panel { display: block; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">Fivelike</h1>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-overview-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <section class="post-toc-wrap sidebar-panel">
+      </section>
+      <!--/noindex-->
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Fivelike"
+      src="/uploads/avatar.gif">
+  <p class="site-author-name" itemprop="name">Fivelike</p>
+  <div class="site-description" itemprop="description">Whatever is worth doing is worth doing well.</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">6</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/fivelike" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;fivelike" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://weibo.com/u/5665256865" title="Weibo → https:&#x2F;&#x2F;weibo.com&#x2F;u&#x2F;5665256865" rel="noopener" target="_blank"><i class="fab fa-weibo fa-fw"></i>Weibo</a>
+      </span>
+  </div>
+
+
+  <div class="links-of-blogroll animated">
+    <div class="links-of-blogroll-title"><i class="fa fa-globe fa-fw"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="http://shrik3.com/" title="http:&#x2F;&#x2F;shrik3.com&#x2F;" rel="noopener" target="_blank">shrik3</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://reachdong.github.io/" title="http:&#x2F;&#x2F;reachdong.github.io&#x2F;" rel="noopener" target="_blank">ReachDong</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://zenner006.github.io/" title="http:&#x2F;&#x2F;zenner006.github.io&#x2F;" rel="noopener" target="_blank">zenner006</a>
+        </li>
+    </ul>
+  </div>
+
+      </section>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner index posts-expand">
+      
+
+      
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2019/07/11/git-tips/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/avatar.gif">
+      <meta itemprop="name" content="Fivelike">
+      <meta itemprop="description" content="Whatever is worth doing is worth doing well.">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Fivelike">
+    </span>
+
+    
+    
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2019/07/11/git-tips/" class="post-title-link" itemprop="url">git-tips</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2019-07-11 15:04:16" itemprop="dateCreated datePublished" datetime="2019-07-11T15:04:16+08:00">2019-07-11</time>
+    </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">Edited on</span>
+        <time title="Modified: 2019-07-12 19:58:22" itemprop="dateModified" datetime="2019-07-12T19:58:22+08:00">2019-07-12</time>
+      </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Git/" itemprop="url" rel="index"><span itemprop="name">Git</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p>复习一下，整理到blog来……</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2019/07/11/git-tips/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2019/07/08/VPS-useradd/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/avatar.gif">
+      <meta itemprop="name" content="Fivelike">
+      <meta itemprop="description" content="Whatever is worth doing is worth doing well.">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Fivelike">
+    </span>
+
+    
+    
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2019/07/08/VPS-useradd/" class="post-title-link" itemprop="url">实验室VPS用户设置</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2019-07-08 17:10:37" itemprop="dateCreated datePublished" datetime="2019-07-08T17:10:37+08:00">2019-07-08</time>
+    </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">Edited on</span>
+        <time title="Modified: 2019-08-05 11:47:48" itemprop="dateModified" datetime="2019-08-05T11:47:48+08:00">2019-08-05</time>
+      </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/VPS/" itemprop="url" rel="index"><span itemprop="name">VPS</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p>记录一下实验室服务器增加用户的一些设置。。。</p>
+<h2 id="登录"><a href="#登录" class="headerlink" title="登录"></a>登录</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh yu@192.168.1.2 (yu为root权限用户)</span><br></pre></td></tr></table></figure>
+
+<h2 id="创建用户目录"><a href="#创建用户目录" class="headerlink" title="创建用户目录"></a>创建用户目录</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;data 挂载了ssd</span><br><span class="line">&#x2F;home  </span><br><span class="line">在两个目录下创建用户文件夹</span><br></pre></td></tr></table></figure>
+<h2 id="添加用户并更改目录所属"><a href="#添加用户并更改目录所属" class="headerlink" title="添加用户并更改目录所属"></a>添加用户并更改目录所属</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">useradd username</span><br><span class="line">useradd -m username #-m创建家目录</span><br><span class="line">passwd username</span><br><span class="line">chown -R username:username userdir</span><br><span class="line"></span><br><span class="line">userdel -r username #删除用户</span><br></pre></td></tr></table></figure>
+<h2 id="更改用户信息"><a href="#更改用户信息" class="headerlink" title="更改用户信息"></a>更改用户信息</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">sudo vim &#x2F;etc&#x2F;passwd</span><br><span class="line">username:pwd:userid:group:comment:用户家目录:shell目录</span><br><span class="line">更改用户家目录为&#x2F;home&#x2F;username</span><br></pre></td></tr></table></figure>
+<h2 id="some-tips"><a href="#some-tips" class="headerlink" title="some tips"></a>some tips</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">uname -a #查看内核&#x2F;操作系统&#x2F;CPU信息</span><br><span class="line"></span><br><span class="line">r：4 w：2 x：1    chmod</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2019/07/07/linuxtips/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/avatar.gif">
+      <meta itemprop="name" content="Fivelike">
+      <meta itemprop="description" content="Whatever is worth doing is worth doing well.">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Fivelike">
+    </span>
+
+    
+    
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2019/07/07/linuxtips/" class="post-title-link" itemprop="url">ArchLinux tips</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2019-07-07 19:51:27" itemprop="dateCreated datePublished" datetime="2019-07-07T19:51:27+08:00">2019-07-07</time>
+    </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">Edited on</span>
+        <time title="Modified: 2019-07-12 20:01:22" itemprop="dateModified" datetime="2019-07-12T20:01:22+08:00">2019-07-12</time>
+      </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/ArchLinux/" itemprop="url" rel="index"><span itemprop="name">ArchLinux</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h1 id="DISK"><a href="#DISK" class="headerlink" title="DISK"></a>DISK</h1><p>tool</p>
+<ul>
+<li>fdisk</li>
+<li>cfdisk</li>
+</ul>
+<p>command</p>
+<ul>
+<li>lsblk</li>
+<li>dd</li>
+</ul>
+<p>日常使用</p>
+<h2 id="包管理-pacman"><a href="#包管理-pacman" class="headerlink" title="包管理 pacman"></a>包管理 pacman</h2><p>必须使用sudo</p>
+<p><code>-S</code> 同步/安装<br><code>pacman -S vim</code> 安装一个包<br><code>pacman -Ss keyword</code> 查找包<br><code>pacman -Syu</code>  更新系统(和所有包)</p>
+<p><code>-R</code> remove<br><code>pacman -R vim</code> 删除一个包</p>
+<p><code>-Q</code> query<br><code>pacman -Qqe</code> 查询本地安装的所有包</p>
+<h2 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h2><ul>
+<li><code>~/.xxx</code>   一般是.xxxrc .xxxconfig</li>
+<li><code>~/.config/programm/config</code></li>
+</ul>
+<p>eg. <code>~/.vimrc</code></p>
+<p>VIM 配置移动到：<br><code>~/.vim_runtime/</code></p>
+<h2 id="常用软件"><a href="#常用软件" class="headerlink" title="常用软件"></a>常用软件</h2><p>导航 hjkl</p>
+<p>TERMINAL :  xfce-terminal</p>
+<p>FILES :  ranger , nnn</p>
+<p>VIM :<br>三种模式</p>
+<ol>
+<li>NOMAL   ESC<br>normal 模式下，所有的输入都视为命令，一般重复输入命令比如dd，yy，意思是处理当前行</li>
+</ol>
+<ul>
+<li>d : delete</li>
+<li>y : copy</li>
+<li>p : paste</li>
+<li>u : undo</li>
+<li>x : delete char</li>
+<li>冒号<code>:</code></li>
+</ul>
+<p>关键词:</p>
+<ul>
+<li>w : word</li>
+<li>gg : 文章开头</li>
+<li>G : 文章结束</li>
+</ul>
+<ol start="2">
+<li>INSERT  i,a,o , and cw (change word)</li>
+<li>VISUAL  v</li>
+</ol>
+<p>iftop:<br>sudo iftop -i wlp3s0(无线网卡 or enp2s0 有线)</p>
+<p>libreoffice: office instead</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">df #查看磁盘使用情况</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2019/07/07/arch_setup/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/avatar.gif">
+      <meta itemprop="name" content="Fivelike">
+      <meta itemprop="description" content="Whatever is worth doing is worth doing well.">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Fivelike">
+    </span>
+
+    
+    
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2019/07/07/arch_setup/" class="post-title-link" itemprop="url">ArchLinux Setup</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+      
+
+      <time title="Created: 2019-07-07 19:48:27 / Modified: 19:49:58" itemprop="dateCreated datePublished" datetime="2019-07-07T19:48:27+08:00">2019-07-07</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/ArchLinux/" itemprop="url" rel="index"><span itemprop="name">ArchLinux</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h2 id="安装媒介："><a href="#安装媒介：" class="headerlink" title="安装媒介："></a>安装媒介：</h2><p>1.将iso写入u盘:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">dd if&#x3D;xxxxx.iso of&#x3D;&#x2F;dev&#x2F;xxx bs&#x3D;4M status&#x3D;progress oflag&#x3D;sync</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>2.使用U盘引导启动</p>
+<p>MBR/UEFI(GPT)<br>使用的是UEFI</p>
+<h2 id="磁盘"><a href="#磁盘" class="headerlink" title="磁盘"></a>磁盘</h2><h3 id="磁盘分区"><a href="#磁盘分区" class="headerlink" title="磁盘分区"></a>磁盘分区</h3><p>工具： fdisk , cfdisk </p>
+<p><code>lsblk</code> 查看分区和挂载信息<br><code>fdisk -l</code>  查看所有硬盘信息<br><code>cfdisk /dev/sdx</code>   分区工具</p>
+<table>
+<thead>
+<tr>
+<th>size</th>
+<th>type</th>
+<th>mount</th>
+<th>note</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>500M+</td>
+<td>EFI SYSTEM</td>
+<td>/boot</td>
+<td>如果已有可以不分</td>
+</tr>
+<tr>
+<td>推荐内存大小的2倍</td>
+<td>SWAP</td>
+<td>SWAP</td>
+<td>可无</td>
+</tr>
+<tr>
+<td>&gt;20G</td>
+<td>EXT4</td>
+<td>/</td>
+<td>分区时type可能为linux filesystem</td>
+</tr>
+</tbody></table>
+<h3 id="分区格式"><a href="#分区格式" class="headerlink" title="分区格式"></a>分区格式</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">mkfs.vfat -F32 &#x2F;dev&#x2F;sda2  #格式化boot分区为fat32</span><br><span class="line">mkfs.ext4 &#x2F;dev&#x2F;sda3       #格式化主分区为 ext4</span><br><span class="line">mkswap &#x2F;dev&#x2F;sda1          #使用sda1 分区成为swap</span><br><span class="line">swapon &#x2F;dev&#x2F;sda1          #开启sda1 swap</span><br></pre></td></tr></table></figure>
+
+<h3 id="磁盘挂载"><a href="#磁盘挂载" class="headerlink" title="磁盘挂载"></a>磁盘挂载</h3><p>NOTE：从U盘引导的系统，/是U盘内系统的挂载点，所以安装linux的主分区暂时挂载到/mnt</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">mount /dev/sda3 /mnt      <span class="comment">#挂载主分区</span></span><br><span class="line">mkdir /mnt/boot           <span class="comment">#建立boot目录</span></span><br><span class="line">mount /dev/sda1 /mnt/boot <span class="comment">#挂载boot分区</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="安装arch"><a href="#安装arch" class="headerlink" title="安装arch"></a>安装arch</h2><p>编辑镜像列表,添加国内源：<br><code>vi /etc/pacman.d/mirrorlist</code></p>
+<p>e.g.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Server &#x3D; http:&#x2F;&#x2F;mirrors.163.com&#x2F;archlinux&#x2F;$repo&#x2F;os&#x2F;$arch</span><br><span class="line">Server &#x3D; http:&#x2F;&#x2F;mirrors.cqu.edu.cn&#x2F;archlinux&#x2F;$repo&#x2F;os&#x2F;$arch</span><br><span class="line">Server &#x3D; https:&#x2F;&#x2F;mirrors.cqu.edu.cn&#x2F;archlinux&#x2F;$repo&#x2F;os&#x2F;$arch</span><br><span class="line">Server &#x3D; http:&#x2F;&#x2F;mirror.lzu.edu.cn&#x2F;archlinux&#x2F;$repo&#x2F;os&#x2F;$arch</span><br><span class="line">Server &#x3D; http:&#x2F;&#x2F;mirrors.neusoft.edu.cn&#x2F;archlinux&#x2F;$repo&#x2F;os&#x2F;$arch</span><br></pre></td></tr></table></figure>
+
+<p>wifi联网：<code>wifi-menu</code></p>
+<p>同步源：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pacman -Syy</span><br></pre></td></tr></table></figure>
+
+<p>安装：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pacstrap &#x2F;mnt base base-devel</span><br></pre></td></tr></table></figure>
+
+<h2 id="fstab"><a href="#fstab" class="headerlink" title="fstab"></a>fstab</h2><p>建议在安装fstab前先<code>lsblk</code>确认一下分区和挂载点</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">genfstab -U -p &#x2F;mnt &gt;&gt; &#x2F;mnt&#x2F;etc&#x2F;fstab</span><br></pre></td></tr></table></figure>
+
+<p><code>vi /mnt/etc/fstab</code>确认生成的fstab信息</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">arch-chroot &#x2F;mnt</span><br></pre></td></tr></table></figure>
+
+<h2 id="基本配置和软件"><a href="#基本配置和软件" class="headerlink" title="基本配置和软件"></a>基本配置和软件</h2><h3 id="LOCALE"><a href="#LOCALE" class="headerlink" title="LOCALE"></a>LOCALE</h3><p>locale 是语言本地化设置，通过locale来启用对应的字符编码支持。</p>
+<p>编辑文件：<code>/etc/locale.gen</code>, 取消需要的编码格式前面的注释符号</p>
+<p>常用的有：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">en_US.UTF-8 UTF-8</span><br><span class="line">zh_CN.GB18030 GB18030</span><br><span class="line">zh_CN.GBK GBK</span><br><span class="line">zh_CN.UTF-8 UTF-8</span><br><span class="line">zh_CN GB2312</span><br></pre></td></tr></table></figure>
+
+<p>编辑文件: <code>/etc/locale.conf</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">LANG&#x3D;en_US.UTF-8</span><br></pre></td></tr></table></figure>
+
+<p>运行<code>locale-gen</code></p>
+<h3 id="用户"><a href="#用户" class="headerlink" title="用户"></a>用户</h3><p>不能使用root用户登录图形界面。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">useradd -G wheel username</span><br><span class="line">passwd username</span><br><span class="line">mkdir -m 700 &#x2F;home&#x2F;username</span><br><span class="line">chown username:username &#x2F;home&#x2F;username</span><br></pre></td></tr></table></figure>
+
+<p>给予sudo权限：<br>编辑<code>/etc/sudoers</code><br>添加：<code>username ALL=(ALL) ALL </code></p>
+<h3 id="图形界面"><a href="#图形界面" class="headerlink" title="图形界面"></a>图形界面</h3><p>使用gnome</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pacman -S xorg-server xorg-xinit xorg xorg-xeyes xorg-xclock</span><br></pre></td></tr></table></figure>
+
+<p><strong>显卡驱动</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pacman -S xf86-video-vesa</span><br></pre></td></tr></table></figure>
+<p><strong>GNOME</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">pacman -S gnome gnome-tweak-tool gnome-packagekit</span><br><span class="line">systemctl enable gdm.service</span><br></pre></td></tr></table></figure>
+
+<h3 id="网络："><a href="#网络：" class="headerlink" title="网络："></a>网络：</h3><p>在gnome下使用networkmanager</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo pacman -S networkmanager network-manager-applet</span><br><span class="line">sudo systemctl enable NetworkManager.service</span><br></pre></td></tr></table></figure>
+
+<p>命令行下使用<code>nmtui</code> , gnome下直接设置 - 网络</p>
+<h3 id="BOOTLOADER"><a href="#BOOTLOADER" class="headerlink" title="BOOTLOADER"></a>BOOTLOADER</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">mount -t efivarfs efivarfs &#x2F;sys&#x2F;firmware&#x2F;efi&#x2F;efivars</span><br><span class="line"></span><br><span class="line">pacman -S grub os-prober efibootmgr</span><br><span class="line"></span><br><span class="line">grub-install --target&#x3D;x86_64-efi --efi-directory&#x3D;&#x2F;boot --bootloader-id&#x3D;arch_grub --recheck</span><br><span class="line"></span><br><span class="line">grub-mkconfig -o &#x2F;boot&#x2F;grub&#x2F;grub.cfg</span><br></pre></td></tr></table></figure>
+
+<h2 id="REBOOT"><a href="#REBOOT" class="headerlink" title="REBOOT "></a>REBOOT </h2><h1 id="常用配置。"><a href="#常用配置。" class="headerlink" title="常用配置。"></a>常用配置。</h1><h2 id="终端："><a href="#终端：" class="headerlink" title="终端："></a>终端：</h2><p>终端模拟器 <code>xfce4-terminal</code><br>shell : <code>zsh</code> , <code>fish</code></p>
+<p>切换默认shell： <code>sudo chsh -s /usr/bin/fish username</code><br>fish配置： <code>fish_config</code></p>
+<p>fish 环境变量：<br>编辑： <code>~/.config/fish/config.sh</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">set -gx PATH &#x2F;SOMETHING&#x2F; $PATH</span><br></pre></td></tr></table></figure>
+
+<h2 id="编辑器"><a href="#编辑器" class="headerlink" title="编辑器"></a>编辑器</h2><p>vim , neovim</p>
+<h2 id="中文字体"><a href="#中文字体" class="headerlink" title="中文字体"></a>中文字体</h2><p>noto-fonts-cjk<br>wqy-zenhei<br>wqy-microhei</p>
+<h2 id="输入法"><a href="#输入法" class="headerlink" title="输入法"></a>输入法</h2><p>fcitx<br>fcitx-configtool<br>fcitx-googlepinyin (or sougoupinyin .. )</p>
+<p>fcitx-gtk2<br>fcitx-gtk3<br>fcitx-qt5</p>
+<p>编辑 <code>/etc/profile</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">export QT_IM_MODULE&#x3D;fcitx</span><br><span class="line">export XMODIFIERS&#x3D;@im&#x3D;fcitx</span><br><span class="line">export GTK_IM_MODULE&#x3D;fcitx</span><br></pre></td></tr></table></figure>
+
+<p>使用 fcitx-configtools 配置</p>
+<h2 id="挂载windows-ntfs分区："><a href="#挂载windows-ntfs分区：" class="headerlink" title="挂载windows ntfs分区："></a>挂载windows ntfs分区：</h2><p>安装软件包： <code>ntfs-3g</code></p>
+<p>临时挂载： <code>ntfs-3g /dev/sdxx /mountpoint</code></p>
+<p>查看设备id：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo blkid &#x2F;dev&#x2F;sdxx</span><br></pre></td></tr></table></figure>
+<p>记录UUID</p>
+<p>自动挂载: 编辑 <code>/etc/fstab</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">UUID&#x3D;XXXXXX  &#x2F;mnt&#x2F;xxx  ntfs-3g  defaults  0 0</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2019/07/05/blog/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/avatar.gif">
+      <meta itemprop="name" content="Fivelike">
+      <meta itemprop="description" content="Whatever is worth doing is worth doing well.">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Fivelike">
+    </span>
+
+    
+    
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2019/07/05/blog/" class="post-title-link" itemprop="url">VPS 部署hexo blog</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+      
+
+      <time title="Created: 2019-07-05 19:18:27 / Modified: 19:50:32" itemprop="dateCreated datePublished" datetime="2019-07-05T19:18:27+08:00">2019-07-05</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/VPS/" itemprop="url" rel="index"><span itemprop="name">VPS</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h1 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h1><p>blog：hexo<br>静态页面-&gt;nginx<br>部署：rsync</p>
+<h1 id="nginx"><a href="#nginx" class="headerlink" title="nginx"></a>nginx</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;etc&#x2F;yum.repo&#x2F;nginx.repo</span><br><span class="line">[nginx]</span><br><span class="line">name&#x3D;nginx repo</span><br><span class="line">baseurl&#x3D;http:&#x2F;&#x2F;nginx.org&#x2F;packages&#x2F;centos&#x2F;$releasever&#x2F;$basearch&#x2F;</span><br><span class="line">gpgcheck&#x3D;0</span><br><span class="line">enabled&#x3D;1</span><br><span class="line"></span><br><span class="line">yum install nginx</span><br><span class="line">cd &#x2F;etc&#x2F;nginx&#x2F;sites-available</span><br><span class="line">vi sample.com</span><br></pre></td></tr></table></figure>
+<p>导入站点配置内容：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">server&#123;</span><br><span class="line">    listen 45.62.103.228:80 default_server;</span><br><span class="line">    root &#x2F;var&#x2F;www&#x2F;fivelike.com&#x2F;;</span><br><span class="line">    server_name fivelike.xyz;</span><br><span class="line">    access_log &#x2F;var&#x2F;log&#x2F;nginx&#x2F;fivelike_access.log;</span><br><span class="line">    error_log &#x2F;var&#x2F;log&#x2F;nginx&#x2F;fivelike_error.log;</span><br><span class="line">    location ~* ^.+\.(ico|gif|jpg|jpeg|png)$ &#123;</span><br><span class="line">        root &#x2F;var&#x2F;www&#x2F;fivelike.xyz&#x2F;;</span><br><span class="line">        access_log off;</span><br><span class="line">        expires 1d;</span><br><span class="line">    &#125;</span><br><span class="line">    location ~* ^.+\.(css|js|txt|xml|swf|wav)$ &#123;</span><br><span class="line">        root &#x2F;var&#x2F;www&#x2F;fivelike.xyz&#x2F;;</span><br><span class="line">        access_log off;</span><br><span class="line">        expires 10m;</span><br><span class="line">    &#125;</span><br><span class="line">    location &#x2F; &#123;</span><br><span class="line">        root &#x2F;var&#x2F;www&#x2F;fivelike.xyz;</span><br><span class="line">        if (-f $request_filename)&#123;</span><br><span class="line">             rewrite ^&#x2F;(.*)$ &#x2F;$1 break;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>建立软链接</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ln -s &#x2F;etc&#x2F;nginx&#x2F;sites-available&#x2F;example.com &#x2F;etc&#x2F;nginx&#x2F;sites-enabled&#x2F;</span><br></pre></td></tr></table></figure>
+<p>在/etc/nginx/nginx.conf http block:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">include &#x2F;etc&#x2F;nginx&#x2F;sites-enabled&#x2F;*;</span><br></pre></td></tr></table></figure>
+<p>query port 80</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">lsof -i:80</span><br><span class="line">firewall-cmd --add-port&#x3D;80&#x2F;tcp --zone&#x3D;public  --permanent</span><br><span class="line">systemctl restart nginx.service</span><br><span class="line">firewall-cmd --list-ports</span><br></pre></td></tr></table></figure>
+
+<h1 id="rsync部署"><a href="#rsync部署" class="headerlink" title="rsync部署"></a>rsync部署</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">rsync -arvp --delete-after -rsh&#x3D;&quot;ssh&quot; &#x2F;home&#x2F;fivelike&#x2F;a&#x2F;blog&#x2F;public&#x2F; root@ xxx.xxx.xxx.xxx:&#x2F;var&#x2F;www&#x2F;fivelike.xyz&#x2F;</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2019/07/05/ss/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/avatar.gif">
+      <meta itemprop="name" content="Fivelike">
+      <meta itemprop="description" content="Whatever is worth doing is worth doing well.">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Fivelike">
+    </span>
+
+    
+    
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2019/07/05/ss/" class="post-title-link" itemprop="url">VPS Shadowsocks</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+      
+
+      <time title="Created: 2019-07-05 18:23:20 / Modified: 19:05:42" itemprop="dateCreated datePublished" datetime="2019-07-05T18:23:20+08:00">2019-07-05</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/VPS/" itemprop="url" rel="index"><span itemprop="name">VPS</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h1 id="SSH配置文件"><a href="#SSH配置文件" class="headerlink" title="SSH配置文件"></a>SSH配置文件</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;etc&#x2F;ssh&#x2F;sshd_config  #修改VPS默认SSH端口</span><br><span class="line">service sshd reload</span><br></pre></td></tr></table></figure>
+<h1 id="pip-install-shadowsocks"><a href="#pip-install-shadowsocks" class="headerlink" title="pip install shadowsocks"></a>pip install shadowsocks</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">curl &quot;https:&#x2F;&#x2F;bootstrap.pypa.io&#x2F;get-pip.py&quot; -o &quot;get-pip.py&quot;</span><br><span class="line">python get-pip.py</span><br><span class="line">pip install shadowsocks</span><br><span class="line">ssserver -p xxx -k xxx -m xxx</span><br></pre></td></tr></table></figure>
+<h1 id="firewall-cmd开启ss端口"><a href="#firewall-cmd开启ss端口" class="headerlink" title="firewall-cmd开启ss端口"></a>firewall-cmd开启ss端口</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">service firewalld start</span><br><span class="line">firewall-cmd --add-port&#x3D;xxx&#x2F;tcp --zone&#x3D;public --permanent</span><br><span class="line">firewall-cmd --reload</span><br><span class="line"></span><br><span class="line">#开机启动firewall</span><br><span class="line">systemctl is-enabled firewalld.service</span><br><span class="line">systemctl enable firewalld.service</span><br></pre></td></tr></table></figure>
+<h1 id="脚本优化"><a href="#脚本优化" class="headerlink" title="脚本优化"></a>脚本优化</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">#添加环境变量 &#x2F;etc&#x2F;profile export PATH&#x3D;&quot;$PATH:&#x2F;home&#x2F;bin&quot;</span><br><span class="line">#runss sh</span><br><span class="line">#!&#x2F;usr&#x2F;bin&#x2F;sh</span><br><span class="line">nohup ssserver -p xxx -k xxx -m xxx &amp;</span><br><span class="line">chmod +x runss</span><br><span class="line"></span><br><span class="line">#开机执行</span><br><span class="line">&#x2F;etc&#x2F;rc.d&#x2F;rc.local  &#x2F;root&#x2F;bin&#x2F;runss </span><br></pre></td></tr></table></figure>
+<h1 id="local-sh"><a href="#local-sh" class="headerlink" title="local sh"></a>local sh</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">#!&#x2F;usr&#x2F;bin&#x2F;sh</span><br><span class="line">pkill sslocal</span><br><span class="line">nohup sslocal -s xxx.xxx.xxx.xxx -p xxx -k xxxx -m xxx -l 1080 &amp;</span><br></pre></td></tr></table></figure>
+<h1 id="shell走代理"><a href="#shell走代理" class="headerlink" title="shell走代理"></a>shell走代理</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">pcaman -S proxychains</span><br><span class="line">&#x2F;etc&#x2F;proxychains.conf  </span><br><span class="line">ProxyList</span><br><span class="line">socks5 127.0.0.1 1080</span><br><span class="line">go!</span><br><span class="line">proxychains4 pip install xxx  </span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+  
+  
+  
+
+
+  
+
+
+
+      
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      const activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      const commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      
+
+      
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Fivelike</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/mist/" class="theme-link" rel="noopener" target="_blank">NexT.Mist</a>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="//cdn.jsdelivr.net/npm/animejs@3.2.0/lib/anime.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
