@@ -283,7 +283,7 @@
       <span class="post-meta-item-text">Posted on</span>
       
 
-      <time title="Created: 2020-09-24 15:43:56 / Modified: 19:48:42" itemprop="dateCreated datePublished" datetime="2020-09-24T15:43:56+08:00">2020-09-24</time>
+      <time title="Created: 2020-09-24 15:43:56 / Modified: 20:07:59" itemprop="dateCreated datePublished" datetime="2020-09-24T15:43:56+08:00">2020-09-24</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -832,10 +832,16 @@
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">Posted on</span>
-      
 
-      <time title="Created: 2019-07-07 19:48:27 / Modified: 19:49:58" itemprop="dateCreated datePublished" datetime="2019-07-07T19:48:27+08:00">2019-07-07</time>
+      <time title="Created: 2019-07-07 19:48:27" itemprop="dateCreated datePublished" datetime="2019-07-07T19:48:27+08:00">2019-07-07</time>
     </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">Edited on</span>
+        <time title="Modified: 2020-09-24 20:10:48" itemprop="dateModified" datetime="2020-09-24T20:10:48+08:00">2020-09-24</time>
+      </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
         <i class="far fa-folder"></i>
@@ -856,111 +862,15 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h2 id="安装媒介："><a href="#安装媒介：" class="headerlink" title="安装媒介："></a>安装媒介：</h2><p>1.将iso写入u盘:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">dd if&#x3D;xxxxx.iso of&#x3D;&#x2F;dev&#x2F;xxx bs&#x3D;4M status&#x3D;progress oflag&#x3D;sync</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<p>2.使用U盘引导启动</p>
-<p>MBR/UEFI(GPT)<br>使用的是UEFI</p>
-<h2 id="磁盘"><a href="#磁盘" class="headerlink" title="磁盘"></a>磁盘</h2><h3 id="磁盘分区"><a href="#磁盘分区" class="headerlink" title="磁盘分区"></a>磁盘分区</h3><p>工具： fdisk , cfdisk </p>
-<p><code>lsblk</code> 查看分区和挂载信息<br><code>fdisk -l</code>  查看所有硬盘信息<br><code>cfdisk /dev/sdx</code>   分区工具</p>
-<table>
-<thead>
-<tr>
-<th>size</th>
-<th>type</th>
-<th>mount</th>
-<th>note</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>500M+</td>
-<td>EFI SYSTEM</td>
-<td>/boot</td>
-<td>如果已有可以不分</td>
-</tr>
-<tr>
-<td>推荐内存大小的2倍</td>
-<td>SWAP</td>
-<td>SWAP</td>
-<td>可无</td>
-</tr>
-<tr>
-<td>&gt;20G</td>
-<td>EXT4</td>
-<td>/</td>
-<td>分区时type可能为linux filesystem</td>
-</tr>
-</tbody></table>
-<h3 id="分区格式"><a href="#分区格式" class="headerlink" title="分区格式"></a>分区格式</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">mkfs.vfat -F32 &#x2F;dev&#x2F;sda2  #格式化boot分区为fat32</span><br><span class="line">mkfs.ext4 &#x2F;dev&#x2F;sda3       #格式化主分区为 ext4</span><br><span class="line">mkswap &#x2F;dev&#x2F;sda1          #使用sda1 分区成为swap</span><br><span class="line">swapon &#x2F;dev&#x2F;sda1          #开启sda1 swap</span><br></pre></td></tr></table></figure>
-
-<h3 id="磁盘挂载"><a href="#磁盘挂载" class="headerlink" title="磁盘挂载"></a>磁盘挂载</h3><p>NOTE：从U盘引导的系统，/是U盘内系统的挂载点，所以安装linux的主分区暂时挂载到/mnt</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">mount /dev/sda3 /mnt      <span class="comment">#挂载主分区</span></span><br><span class="line">mkdir /mnt/boot           <span class="comment">#建立boot目录</span></span><br><span class="line">mount /dev/sda1 /mnt/boot <span class="comment">#挂载boot分区</span></span><br></pre></td></tr></table></figure>
-
-<h2 id="安装arch"><a href="#安装arch" class="headerlink" title="安装arch"></a>安装arch</h2><p>编辑镜像列表,添加国内源：<br><code>vi /etc/pacman.d/mirrorlist</code></p>
-<p>e.g.</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Server &#x3D; http:&#x2F;&#x2F;mirrors.163.com&#x2F;archlinux&#x2F;$repo&#x2F;os&#x2F;$arch</span><br><span class="line">Server &#x3D; http:&#x2F;&#x2F;mirrors.cqu.edu.cn&#x2F;archlinux&#x2F;$repo&#x2F;os&#x2F;$arch</span><br><span class="line">Server &#x3D; https:&#x2F;&#x2F;mirrors.cqu.edu.cn&#x2F;archlinux&#x2F;$repo&#x2F;os&#x2F;$arch</span><br><span class="line">Server &#x3D; http:&#x2F;&#x2F;mirror.lzu.edu.cn&#x2F;archlinux&#x2F;$repo&#x2F;os&#x2F;$arch</span><br><span class="line">Server &#x3D; http:&#x2F;&#x2F;mirrors.neusoft.edu.cn&#x2F;archlinux&#x2F;$repo&#x2F;os&#x2F;$arch</span><br></pre></td></tr></table></figure>
-
-<p>wifi联网：<code>wifi-menu</code></p>
-<p>同步源：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pacman -Syy</span><br></pre></td></tr></table></figure>
-
-<p>安装：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pacstrap &#x2F;mnt base base-devel</span><br></pre></td></tr></table></figure>
-
-<h2 id="fstab"><a href="#fstab" class="headerlink" title="fstab"></a>fstab</h2><p>建议在安装fstab前先<code>lsblk</code>确认一下分区和挂载点</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">genfstab -U -p &#x2F;mnt &gt;&gt; &#x2F;mnt&#x2F;etc&#x2F;fstab</span><br></pre></td></tr></table></figure>
-
-<p><code>vi /mnt/etc/fstab</code>确认生成的fstab信息</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">arch-chroot &#x2F;mnt</span><br></pre></td></tr></table></figure>
-
-<h2 id="基本配置和软件"><a href="#基本配置和软件" class="headerlink" title="基本配置和软件"></a>基本配置和软件</h2><h3 id="LOCALE"><a href="#LOCALE" class="headerlink" title="LOCALE"></a>LOCALE</h3><p>locale 是语言本地化设置，通过locale来启用对应的字符编码支持。</p>
-<p>编辑文件：<code>/etc/locale.gen</code>, 取消需要的编码格式前面的注释符号</p>
-<p>常用的有：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">en_US.UTF-8 UTF-8</span><br><span class="line">zh_CN.GB18030 GB18030</span><br><span class="line">zh_CN.GBK GBK</span><br><span class="line">zh_CN.UTF-8 UTF-8</span><br><span class="line">zh_CN GB2312</span><br></pre></td></tr></table></figure>
-
-<p>编辑文件: <code>/etc/locale.conf</code></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">LANG&#x3D;en_US.UTF-8</span><br></pre></td></tr></table></figure>
-
-<p>运行<code>locale-gen</code></p>
-<h3 id="用户"><a href="#用户" class="headerlink" title="用户"></a>用户</h3><p>不能使用root用户登录图形界面。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">useradd -G wheel username</span><br><span class="line">passwd username</span><br><span class="line">mkdir -m 700 &#x2F;home&#x2F;username</span><br><span class="line">chown username:username &#x2F;home&#x2F;username</span><br></pre></td></tr></table></figure>
-
-<p>给予sudo权限：<br>编辑<code>/etc/sudoers</code><br>添加：<code>username ALL=(ALL) ALL </code></p>
-<h3 id="图形界面"><a href="#图形界面" class="headerlink" title="图形界面"></a>图形界面</h3><p>使用gnome</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pacman -S xorg-server xorg-xinit xorg xorg-xeyes xorg-xclock</span><br></pre></td></tr></table></figure>
-
-<p><strong>显卡驱动</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pacman -S xf86-video-vesa</span><br></pre></td></tr></table></figure>
-<p><strong>GNOME</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">pacman -S gnome gnome-tweak-tool gnome-packagekit</span><br><span class="line">systemctl enable gdm.service</span><br></pre></td></tr></table></figure>
-
-<h3 id="网络："><a href="#网络：" class="headerlink" title="网络："></a>网络：</h3><p>在gnome下使用networkmanager</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo pacman -S networkmanager network-manager-applet</span><br><span class="line">sudo systemctl enable NetworkManager.service</span><br></pre></td></tr></table></figure>
-
-<p>命令行下使用<code>nmtui</code> , gnome下直接设置 - 网络</p>
-<h3 id="BOOTLOADER"><a href="#BOOTLOADER" class="headerlink" title="BOOTLOADER"></a>BOOTLOADER</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">mount -t efivarfs efivarfs &#x2F;sys&#x2F;firmware&#x2F;efi&#x2F;efivars</span><br><span class="line"></span><br><span class="line">pacman -S grub os-prober efibootmgr</span><br><span class="line"></span><br><span class="line">grub-install --target&#x3D;x86_64-efi --efi-directory&#x3D;&#x2F;boot --bootloader-id&#x3D;arch_grub --recheck</span><br><span class="line"></span><br><span class="line">grub-mkconfig -o &#x2F;boot&#x2F;grub&#x2F;grub.cfg</span><br></pre></td></tr></table></figure>
-
-<h2 id="REBOOT"><a href="#REBOOT" class="headerlink" title="REBOOT "></a>REBOOT </h2><h1 id="常用配置。"><a href="#常用配置。" class="headerlink" title="常用配置。"></a>常用配置。</h1><h2 id="终端："><a href="#终端：" class="headerlink" title="终端："></a>终端：</h2><p>终端模拟器 <code>xfce4-terminal</code><br>shell : <code>zsh</code> , <code>fish</code></p>
-<p>切换默认shell： <code>sudo chsh -s /usr/bin/fish username</code><br>fish配置： <code>fish_config</code></p>
-<p>fish 环境变量：<br>编辑： <code>~/.config/fish/config.sh</code></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">set -gx PATH &#x2F;SOMETHING&#x2F; $PATH</span><br></pre></td></tr></table></figure>
-
-<h2 id="编辑器"><a href="#编辑器" class="headerlink" title="编辑器"></a>编辑器</h2><p>vim , neovim</p>
-<h2 id="中文字体"><a href="#中文字体" class="headerlink" title="中文字体"></a>中文字体</h2><p>noto-fonts-cjk<br>wqy-zenhei<br>wqy-microhei</p>
-<h2 id="输入法"><a href="#输入法" class="headerlink" title="输入法"></a>输入法</h2><p>fcitx<br>fcitx-configtool<br>fcitx-googlepinyin (or sougoupinyin .. )</p>
-<p>fcitx-gtk2<br>fcitx-gtk3<br>fcitx-qt5</p>
-<p>编辑 <code>/etc/profile</code></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">export QT_IM_MODULE&#x3D;fcitx</span><br><span class="line">export XMODIFIERS&#x3D;@im&#x3D;fcitx</span><br><span class="line">export GTK_IM_MODULE&#x3D;fcitx</span><br></pre></td></tr></table></figure>
-
-<p>使用 fcitx-configtools 配置</p>
-<h2 id="挂载windows-ntfs分区："><a href="#挂载windows-ntfs分区：" class="headerlink" title="挂载windows ntfs分区："></a>挂载windows ntfs分区：</h2><p>安装软件包： <code>ntfs-3g</code></p>
-<p>临时挂载： <code>ntfs-3g /dev/sdxx /mountpoint</code></p>
-<p>查看设备id：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo blkid &#x2F;dev&#x2F;sdxx</span><br></pre></td></tr></table></figure>
-<p>记录UUID</p>
-<p>自动挂载: 编辑 <code>/etc/fstab</code></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">UUID&#x3D;XXXXXX  &#x2F;mnt&#x2F;xxx  ntfs-3g  defaults  0 0</span><br></pre></td></tr></table></figure>
-
+          <p>Install ArchLinux …….&amp; 常用配置记录……</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2019/07/07/arch_setup/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
