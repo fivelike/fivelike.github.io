@@ -188,7 +188,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">9</span>
+          <span class="site-state-item-count">10</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -250,6 +250,133 @@
       
 
       
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2019/07/07/linuxtips/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/avatar.gif">
+      <meta itemprop="name" content="Fivelike">
+      <meta itemprop="description" content="Whatever is worth doing is worth doing well.">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Fivelike">
+    </span>
+
+    
+    
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2019/07/07/linuxtips/" class="post-title-link" itemprop="url">ArchLinux tips</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2019-07-07 19:51:27" itemprop="dateCreated datePublished" datetime="2019-07-07T19:51:27+08:00">2019-07-07</time>
+    </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">Edited on</span>
+        <time title="Modified: 2019-07-12 20:01:22" itemprop="dateModified" datetime="2019-07-12T20:01:22+08:00">2019-07-12</time>
+      </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/ArchLinux/" itemprop="url" rel="index"><span itemprop="name">ArchLinux</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h1 id="DISK"><a href="#DISK" class="headerlink" title="DISK"></a>DISK</h1><p>tool</p>
+<ul>
+<li>fdisk</li>
+<li>cfdisk</li>
+</ul>
+<p>command</p>
+<ul>
+<li>lsblk</li>
+<li>dd</li>
+</ul>
+<p>日常使用</p>
+<h2 id="包管理-pacman"><a href="#包管理-pacman" class="headerlink" title="包管理 pacman"></a>包管理 pacman</h2><p>必须使用sudo</p>
+<p><code>-S</code> 同步/安装<br><code>pacman -S vim</code> 安装一个包<br><code>pacman -Ss keyword</code> 查找包<br><code>pacman -Syu</code>  更新系统(和所有包)</p>
+<p><code>-R</code> remove<br><code>pacman -R vim</code> 删除一个包</p>
+<p><code>-Q</code> query<br><code>pacman -Qqe</code> 查询本地安装的所有包</p>
+<h2 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h2><ul>
+<li><code>~/.xxx</code>   一般是.xxxrc .xxxconfig</li>
+<li><code>~/.config/programm/config</code></li>
+</ul>
+<p>eg. <code>~/.vimrc</code></p>
+<p>VIM 配置移动到：<br><code>~/.vim_runtime/</code></p>
+<h2 id="常用软件"><a href="#常用软件" class="headerlink" title="常用软件"></a>常用软件</h2><p>导航 hjkl</p>
+<p>TERMINAL :  xfce-terminal</p>
+<p>FILES :  ranger , nnn</p>
+<p>VIM :<br>三种模式</p>
+<ol>
+<li>NOMAL   ESC<br>normal 模式下，所有的输入都视为命令，一般重复输入命令比如dd，yy，意思是处理当前行</li>
+</ol>
+<ul>
+<li>d : delete</li>
+<li>y : copy</li>
+<li>p : paste</li>
+<li>u : undo</li>
+<li>x : delete char</li>
+<li>冒号<code>:</code></li>
+</ul>
+<p>关键词:</p>
+<ul>
+<li>w : word</li>
+<li>gg : 文章开头</li>
+<li>G : 文章结束</li>
+</ul>
+<ol start="2">
+<li>INSERT  i,a,o , and cw (change word)</li>
+<li>VISUAL  v</li>
+</ol>
+<p>iftop:<br>sudo iftop -i wlp3s0(无线网卡 or enp2s0 有线)</p>
+<p>libreoffice: office instead</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">df #查看磁盘使用情况</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+  
+  
+  
+
       
   
   
