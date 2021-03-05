@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.1.1">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.14.0/css/all.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css">
+
+<script class="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Mist","version":"8.0.0","exturl":false,"sidebar":{"position":"right","display":"post","padding":35,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}};
+  </script>
+
+  <meta name="description" content="哈希函数，哈希表，RandomPool结构，布隆过滤器，一致性哈希，并查集，岛问题。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="哈希表&amp;布隆过滤器&amp;并查集">
+<meta property="og:url" content="http://example.com/2021/03/05/basic-class-05/index.html">
+<meta property="og:site_name" content="Fivelike">
+<meta property="og:description" content="哈希函数，哈希表，RandomPool结构，布隆过滤器，一致性哈希，并查集，岛问题。">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://example.com/2021/03/05/basic-class-05/image-20210305140746821.png">
+<meta property="og:image" content="http://example.com/2021/03/05/basic-class-05/image-20210305142622786.png">
+<meta property="og:image" content="http://example.com/2021/03/05/basic-class-05/image-20210305142719793.png">
+<meta property="og:image" content="http://example.com/2021/03/05/basic-class-05/image-20210305155321584.png">
+<meta property="og:image" content="http://example.com/2021/03/05/basic-class-05/image-20210305155354502.png">
+<meta property="og:image" content="http://example.com/2021/03/05/basic-class-05/image-20210305161155391.png">
+<meta property="og:image" content="http://example.com/2021/03/05/basic-class-05/image-20210305161230491.png">
+<meta property="og:image" content="http://example.com/2021/03/05/basic-class-05/image-20210305161256377.png">
+<meta property="og:image" content="http://example.com/2021/03/05/basic-class-05/image-20210305161319472.png">
+<meta property="og:image" content="http://example.com/2021/03/05/basic-class-05/image-20210305170743936.png">
+<meta property="og:image" content="http://example.com/2021/03/05/basic-class-05/image-20210305170807883.png">
+<meta property="og:image" content="http://example.com/2021/03/05/basic-class-05/image-20210305170834982.png">
+<meta property="og:image" content="http://example.com/2021/03/05/basic-class-05/image-20210305171009075.png">
+<meta property="og:image" content="http://example.com/2021/03/05/basic-class-05/image-20210305171631451.png">
+<meta property="article:published_time" content="2021-03-05T05:41:13.000Z">
+<meta property="article:modified_time" content="2021-03-05T09:44:17.140Z">
+<meta property="article:author" content="Fivelike">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/2021/03/05/basic-class-05/image-20210305140746821.png">
+
+
+<link rel="canonical" href="http://example.com/2021/03/05/basic-class-05/">
+
+
+<script class="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>哈希表&布隆过滤器&并查集 | Fivelike</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  body { margin-top: 2rem; }
+
+  .use-motion .menu-item,
+  .use-motion .sidebar,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header {
+    visibility: visible;
+  }
+
+  .use-motion .header,
+  .use-motion .site-brand-container .toggle,
+  .use-motion .footer { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle,
+  .use-motion .custom-logo-image {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line {
+    transform: scaleX(1);
+  }
+
+  .search-pop-overlay, .sidebar-nav { display: none; }
+  .sidebar-panel { display: block; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">Fivelike</h1>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <section class="post-toc-wrap sidebar-panel">
+          <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-%E8%AE%A4%E8%AF%86%E5%93%88%E5%B8%8C%E5%87%BD%E6%95%B0%E5%92%8C%E5%93%88%E5%B8%8C%E8%A1%A8"><span class="nav-number">1.</span> <span class="nav-text">1. 认识哈希函数和哈希表</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%93%88%E5%B8%8C%E5%87%BD%E6%95%B0"><span class="nav-number">1.1.</span> <span class="nav-text">哈希函数</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%93%88%E5%B8%8C%E8%A1%A8"><span class="nav-number">1.2.</span> <span class="nav-text">哈希表</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-%E8%AE%BE%E8%AE%A1RandomPool%E7%BB%93%E6%9E%84"><span class="nav-number">2.</span> <span class="nav-text">2. 设计RandomPool结构</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-%E5%B8%83%E9%9A%86%E8%BF%87%E6%BB%A4%E5%99%A8"><span class="nav-number">3.</span> <span class="nav-text">3. 布隆过滤器</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-%E4%B8%80%E8%87%B4%E6%80%A7%E5%93%88%E5%B8%8C"><span class="nav-number">4.</span> <span class="nav-text">4. 一致性哈希</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#5-%E5%B9%B6%E6%9F%A5%E9%9B%86"><span class="nav-number">5.</span> <span class="nav-text">5. 并查集</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#6-%E5%B2%9B%E9%97%AE%E9%A2%98"><span class="nav-number">6.</span> <span class="nav-text">6. 岛问题</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%8D%95%E4%BB%BB%E5%8A%A1%E6%80%9D%E8%B7%AF"><span class="nav-number">6.1.</span> <span class="nav-text">单任务思路</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%A4%9A%E4%BB%BB%E5%8A%A1%E6%80%9D%E8%B7%AF-%E5%B9%B6%E8%A1%8C%E8%AE%A1%E7%AE%97"><span class="nav-number">6.2.</span> <span class="nav-text">多任务思路(并行计算)</span></a></li></ol></li></ol></div>
+      </section>
+      <!--/noindex-->
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Fivelike"
+      src="/uploads/avatar.gif">
+  <p class="site-author-name" itemprop="name">Fivelike</p>
+  <div class="site-description" itemprop="description">Whatever is worth doing is worth doing well.</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">11</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/fivelike" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;fivelike" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://weibo.com/u/5665256865" title="Weibo → https:&#x2F;&#x2F;weibo.com&#x2F;u&#x2F;5665256865" rel="noopener" target="_blank"><i class="fab fa-weibo fa-fw"></i>Weibo</a>
+      </span>
+  </div>
+
+
+  <div class="links-of-blogroll animated">
+    <div class="links-of-blogroll-title"><i class="fa fa-globe fa-fw"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="http://shrik3.com/" title="http:&#x2F;&#x2F;shrik3.com&#x2F;" rel="noopener" target="_blank">shrik3</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://reachdong.github.io/" title="http:&#x2F;&#x2F;reachdong.github.io&#x2F;" rel="noopener" target="_blank">ReachDong</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://zenner006.github.io/" title="http:&#x2F;&#x2F;zenner006.github.io&#x2F;" rel="noopener" target="_blank">zenner006</a>
+        </li>
+    </ul>
+  </div>
+
+      </section>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+      
+
+      
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/03/05/basic-class-05/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/avatar.gif">
+      <meta itemprop="name" content="Fivelike">
+      <meta itemprop="description" content="Whatever is worth doing is worth doing well.">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Fivelike">
+    </span>
+
+    
+    
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          哈希表&布隆过滤器&并查集
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+      
+
+      <time title="Created: 2021-03-05 13:41:13 / Modified: 17:44:17" itemprop="dateCreated datePublished" datetime="2021-03-05T13:41:13+08:00">2021-03-05</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E7%AE%97%E6%B3%95/" itemprop="url" rel="index"><span itemprop="name">算法</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p>哈希函数，哈希表，RandomPool结构，布隆过滤器，一致性哈希，并查集，岛问题。</p>
+<a id="more"></a>
+
+
+
+<h4 id="1-认识哈希函数和哈希表"><a href="#1-认识哈希函数和哈希表" class="headerlink" title="1. 认识哈希函数和哈希表"></a>1. 认识哈希函数和哈希表</h4><h5 id="哈希函数"><a href="#哈希函数" class="headerlink" title="哈希函数"></a>哈希函数</h5><p><img src="/2021/03/05/basic-class-05/image-20210305140746821.png" alt="image-20210305140746821"></p>
+<h5 id="哈希表"><a href="#哈希表" class="headerlink" title="哈希表"></a>哈希表</h5><p><img src="/2021/03/05/basic-class-05/image-20210305142622786.png" alt="image-20210305142622786"></p>
+<h4 id="2-设计RandomPool结构"><a href="#2-设计RandomPool结构" class="headerlink" title="2. 设计RandomPool结构"></a>2. 设计RandomPool结构</h4><p><img src="/2021/03/05/basic-class-05/image-20210305142719793.png" alt="image-20210305142719793"></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> java.util.HashMap;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Code_02_RandomPool</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">Pool</span>&lt;<span class="title">K</span>&gt; </span>&#123;</span><br><span class="line">        <span class="keyword">private</span> HashMap&lt;K, Integer&gt; keyIndexMap;</span><br><span class="line">        <span class="keyword">private</span> HashMap&lt;Integer, K&gt; indexKeyMap;</span><br><span class="line">        <span class="keyword">private</span> <span class="keyword">int</span> size;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="title">Pool</span><span class="params">()</span> </span>&#123;</span><br><span class="line">            <span class="keyword">this</span>.keyIndexMap = <span class="keyword">new</span> HashMap&lt;K, Integer&gt;();</span><br><span class="line">            <span class="keyword">this</span>.indexKeyMap = <span class="keyword">new</span> HashMap&lt;Integer, K&gt;();</span><br><span class="line">            <span class="keyword">this</span>.size = <span class="number">0</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">insert</span><span class="params">(K key)</span> </span>&#123;</span><br><span class="line">            <span class="keyword">if</span> (!<span class="keyword">this</span>.keyIndexMap.containsKey(key)) &#123;</span><br><span class="line">                <span class="keyword">this</span>.keyIndexMap.put(key, <span class="keyword">this</span>.size);</span><br><span class="line">                <span class="keyword">this</span>.indexKeyMap.put(<span class="keyword">this</span>.size++, key);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">delete</span><span class="params">(K key)</span> </span>&#123;</span><br><span class="line">            <span class="keyword">if</span> (<span class="keyword">this</span>.keyIndexMap.containsKey(key)) &#123;</span><br><span class="line">                <span class="keyword">int</span> deleteIndex = <span class="keyword">this</span>.keyIndexMap.get(key);</span><br><span class="line">                <span class="keyword">int</span> lastIndex = --<span class="keyword">this</span>.size;</span><br><span class="line">                K lastkey = <span class="keyword">this</span>.indexKeyMap.get(lastIndex);</span><br><span class="line">                <span class="keyword">this</span>.keyIndexMap.put(lastkey, deleteIndex);</span><br><span class="line">                <span class="keyword">this</span>.indexKeyMap.put(deleteIndex, lastkey);</span><br><span class="line">                <span class="keyword">this</span>.keyIndexMap.remove(key);</span><br><span class="line">                <span class="keyword">this</span>.indexKeyMap.remove(lastIndex);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">public</span> K <span class="title">getRandom</span><span class="params">()</span> </span>&#123;</span><br><span class="line">            <span class="keyword">if</span> (<span class="keyword">this</span>.size == <span class="number">0</span>) &#123;</span><br><span class="line">                <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">int</span> randomIndex = (<span class="keyword">int</span>) (Math.random() * <span class="keyword">this</span>.size);</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">this</span>.indexKeyMap.get(randomIndex);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">            Pool&lt;String&gt; pool = <span class="keyword">new</span> Pool&lt;String&gt;();</span><br><span class="line">            pool.insert(<span class="string">&quot;wu&quot;</span>);</span><br><span class="line">            pool.insert(<span class="string">&quot;xiang&quot;</span>);</span><br><span class="line">            pool.insert(<span class="string">&quot;fivelike&quot;</span>);</span><br><span class="line">            System.out.println(pool.getRandom());</span><br><span class="line">            System.out.println(pool.getRandom());</span><br><span class="line">            System.out.println(pool.getRandom());</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="3-布隆过滤器"><a href="#3-布隆过滤器" class="headerlink" title="3. 布隆过滤器"></a>3. 布隆过滤器</h4><p> <img src="/2021/03/05/basic-class-05/image-20210305155321584.png" alt="image-20210305155321584"></p>
+<p><img src="/2021/03/05/basic-class-05/image-20210305155354502.png" alt="image-20210305155354502"></p>
+<h4 id="4-一致性哈希"><a href="#4-一致性哈希" class="headerlink" title="4. 一致性哈希"></a>4. 一致性哈希</h4><p><img src="/2021/03/05/basic-class-05/image-20210305161155391.png" alt="image-20210305161155391"></p>
+<p><img src="/2021/03/05/basic-class-05/image-20210305161230491.png" alt="image-20210305161230491"></p>
+<p><img src="/2021/03/05/basic-class-05/image-20210305161256377.png" alt="image-20210305161256377"></p>
+<p><img src="/2021/03/05/basic-class-05/image-20210305161319472.png" alt="image-20210305161319472"></p>
+<h4 id="5-并查集"><a href="#5-并查集" class="headerlink" title="5. 并查集"></a>5. 并查集</h4><p><img src="/2021/03/05/basic-class-05/image-20210305170743936.png" alt="image-20210305170743936"></p>
+<p><img src="/2021/03/05/basic-class-05/image-20210305170807883.png" alt="image-20210305170807883"></p>
+<p><img src="/2021/03/05/basic-class-05/image-20210305170834982.png" alt="image-20210305170834982"></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> java.util.HashMap;</span><br><span class="line"><span class="keyword">import</span> java.util.List;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Code_03_UnionFind</span> </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">Node</span> </span>&#123;</span><br><span class="line">        <span class="comment">// whatever you like</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">UnionFindSet</span> </span>&#123;</span><br><span class="line">        <span class="keyword">public</span> HashMap&lt;Node, Node&gt; fatherMap;</span><br><span class="line">        <span class="keyword">public</span> HashMap&lt;Node, Integer&gt; sizeMap;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="title">UnionFindSet</span><span class="params">()</span> </span>&#123;</span><br><span class="line">            fatherMap = <span class="keyword">new</span> HashMap&lt;Node, Node&gt;();</span><br><span class="line">            sizeMap = <span class="keyword">new</span> HashMap&lt;Node, Integer&gt;();</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">makeSets</span><span class="params">(List&lt;Node&gt; nodes)</span> </span>&#123;</span><br><span class="line">            fatherMap.clear();</span><br><span class="line">            sizeMap.clear();</span><br><span class="line">            <span class="keyword">for</span> (Node node : nodes) &#123;</span><br><span class="line">                fatherMap.put(node, node);</span><br><span class="line">                sizeMap.put(node, <span class="number">1</span>);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">private</span> Node <span class="title">findHead</span><span class="params">(Node node)</span> </span>&#123;</span><br><span class="line">            Node father = fatherMap.get(node);</span><br><span class="line">            <span class="keyword">if</span> (father != node) &#123;</span><br><span class="line">                father = findHead(father);</span><br><span class="line">            &#125;</span><br><span class="line">            fatherMap.put(node, father);</span><br><span class="line">            <span class="keyword">return</span> father;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">isSameSet</span><span class="params">(Node a, Node b)</span> </span>&#123;</span><br><span class="line">            <span class="keyword">return</span> findHead(a) == findHead(b);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">union</span><span class="params">(Node a, Node b)</span> </span>&#123;</span><br><span class="line"><span class="comment">//            if (a == null || b = null) &#123;</span></span><br><span class="line"><span class="comment">//                return;</span></span><br><span class="line"><span class="comment">//            &#125;</span></span><br><span class="line">            Node aHead = findHead(a);</span><br><span class="line">            Node bHead = findHead(b);</span><br><span class="line">            <span class="keyword">if</span> (aHead != bHead) &#123;</span><br><span class="line">                <span class="keyword">int</span> aSetSize = sizeMap.get(aHead);</span><br><span class="line">                <span class="keyword">int</span> bSetSize = sizeMap.get(bHead);</span><br><span class="line">                <span class="keyword">if</span> (aSetSize &lt;= bSetSize) &#123;</span><br><span class="line">                    fatherMap.put(aHead, bHead);</span><br><span class="line">                    sizeMap.put(bHead, aSetSize + bSetSize);</span><br><span class="line">                &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                    fatherMap.put(bHead, aHead);</span><br><span class="line">                    sizeMap.put(aHead, aSetSize + bSetSize);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="6-岛问题"><a href="#6-岛问题" class="headerlink" title="6. 岛问题"></a>6. 岛问题</h4><p><img src="/2021/03/05/basic-class-05/image-20210305171009075.png" alt="image-20210305171009075"></p>
+<h5 id="单任务思路"><a href="#单任务思路" class="headerlink" title="单任务思路"></a>单任务思路</h5><ul>
+<li>遇到岛就深度遍历把遍历过的都给标记起来。之后遇到标记过的，直接跳过，直到遇到未标记的岛，就给岛的数量加一；</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Code_04_Islands</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">countIslands</span><span class="params">(<span class="keyword">int</span>[][] m)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (m == <span class="keyword">null</span> || m[<span class="number">0</span>] == <span class="keyword">null</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">int</span> N = m.length;</span><br><span class="line">        <span class="keyword">int</span> M = m[<span class="number">0</span>].length;</span><br><span class="line">        <span class="keyword">int</span> res = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; N; i++) &#123;</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; M; j++) &#123;</span><br><span class="line">                <span class="keyword">if</span> (m[i][j] == <span class="number">1</span>) &#123;</span><br><span class="line">                    res++;</span><br><span class="line">                    infect(m, i, j, N, M);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">infect</span><span class="params">(<span class="keyword">int</span>[][] m, <span class="keyword">int</span> i, <span class="keyword">int</span> j, <span class="keyword">int</span> N, <span class="keyword">int</span> M)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (i &lt; <span class="number">0</span> || i &gt;= N || j &lt; <span class="number">0</span> || j &gt;= M || m[i][j] != <span class="number">1</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        m[i][j] = <span class="number">2</span>;</span><br><span class="line">        infect(m, i + <span class="number">1</span>, j, N, M);</span><br><span class="line">        infect(m, i - <span class="number">1</span>, j, N, M);</span><br><span class="line">        infect(m, i, j + <span class="number">1</span>, N, M);</span><br><span class="line">        infect(m, i, j - <span class="number">1</span>, N, M);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h5 id="多任务思路-并行计算"><a href="#多任务思路-并行计算" class="headerlink" title="多任务思路(并行计算)"></a>多任务思路(并行计算)</h5><p><img src="/2021/03/05/basic-class-05/image-20210305171631451.png" alt="image-20210305171631451"></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2020/10/26/basic-class-04/" rel="prev" title="二叉树">
+                  <i class="fa fa-chevron-left"></i> 二叉树
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+  
+  
+  
+
+
+
+      
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      const activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      const commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      
+
+      
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Fivelike</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/mist/" class="theme-link" rel="noopener" target="_blank">NexT.Mist</a>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="//cdn.jsdelivr.net/npm/animejs@3.2.0/lib/anime.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
