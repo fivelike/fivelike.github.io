@@ -25,7 +25,7 @@
   <meta name="description" content="Whatever is worth doing is worth doing well.">
 <meta property="og:type" content="website">
 <meta property="og:title" content="Fivelike">
-<meta property="og:url" content="http://example.com/archives/2020/index.html">
+<meta property="og:url" content="http://example.com/page/3/index.html">
 <meta property="og:site_name" content="Fivelike">
 <meta property="og:description" content="Whatever is worth doing is worth doing well.">
 <meta property="og:locale" content="en_US">
@@ -33,20 +33,20 @@
 <meta name="twitter:card" content="summary">
 
 
-<link rel="canonical" href="http://example.com/archives/2020/">
+<link rel="canonical" href="http://example.com/page/3/">
 
 
 <script class="page-configurations">
   // https://hexo.io/docs/variables.html
   CONFIG.page = {
     sidebar: "",
-    isHome : false,
+    isHome : true,
     isPost : false,
     lang   : 'en'
   };
 </script>
 
-  <title>Archive | Fivelike</title>
+  <title>Fivelike</title>
   
 
 
@@ -246,113 +246,93 @@
 </noscript>
 
 
-    <div class="main-inner archive posts-collapse">
+    <div class="main-inner index posts-expand">
       
 
       
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2019/07/05/ss/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/avatar.gif">
+      <meta itemprop="name" content="Fivelike">
+      <meta itemprop="description" content="Whatever is worth doing is worth doing well.">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Fivelike">
+    </span>
+
+    
+    
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2019/07/05/ss/" class="post-title-link" itemprop="url">VPS Shadowsocks</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+      
+
+      <time title="Created: 2019-07-05 18:23:20 / Modified: 19:05:42" itemprop="dateCreated datePublished" datetime="2019-07-05T18:23:20+08:00">2019-07-05</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/VPS/" itemprop="url" rel="index"><span itemprop="name">VPS</span></a>
+        </span>
+    </span>
 
   
-  
-  
-  <div class="post-block">
-    <div class="post-content">
-      <div class="collection-title">
-        <span class="collection-header">Um..! 13 posts in total. Keep on posting.</span>
-      </div>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h1 id="SSH配置文件"><a href="#SSH配置文件" class="headerlink" title="SSH配置文件"></a>SSH配置文件</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;etc&#x2F;ssh&#x2F;sshd_config  #修改VPS默认SSH端口</span><br><span class="line">service sshd reload</span><br></pre></td></tr></table></figure>
+<h1 id="pip-install-shadowsocks"><a href="#pip-install-shadowsocks" class="headerlink" title="pip install shadowsocks"></a>pip install shadowsocks</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">curl &quot;https:&#x2F;&#x2F;bootstrap.pypa.io&#x2F;get-pip.py&quot; -o &quot;get-pip.py&quot;</span><br><span class="line">python get-pip.py</span><br><span class="line">pip install shadowsocks</span><br><span class="line">ssserver -p xxx -k xxx -m xxx</span><br></pre></td></tr></table></figure>
+<h1 id="firewall-cmd开启ss端口"><a href="#firewall-cmd开启ss端口" class="headerlink" title="firewall-cmd开启ss端口"></a>firewall-cmd开启ss端口</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">service firewalld start</span><br><span class="line">firewall-cmd --add-port&#x3D;xxx&#x2F;tcp --zone&#x3D;public --permanent</span><br><span class="line">firewall-cmd --reload</span><br><span class="line"></span><br><span class="line">#开机启动firewall</span><br><span class="line">systemctl is-enabled firewalld.service</span><br><span class="line">systemctl enable firewalld.service</span><br></pre></td></tr></table></figure>
+<h1 id="脚本优化"><a href="#脚本优化" class="headerlink" title="脚本优化"></a>脚本优化</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">#添加环境变量 &#x2F;etc&#x2F;profile export PATH&#x3D;&quot;$PATH:&#x2F;home&#x2F;bin&quot;</span><br><span class="line">#runss sh</span><br><span class="line">#!&#x2F;usr&#x2F;bin&#x2F;sh</span><br><span class="line">nohup ssserver -p xxx -k xxx -m xxx &amp;</span><br><span class="line">chmod +x runss</span><br><span class="line"></span><br><span class="line">#开机执行</span><br><span class="line">&#x2F;etc&#x2F;rc.d&#x2F;rc.local  &#x2F;root&#x2F;bin&#x2F;runss </span><br></pre></td></tr></table></figure>
+<h1 id="local-sh"><a href="#local-sh" class="headerlink" title="local sh"></a>local sh</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">#!&#x2F;usr&#x2F;bin&#x2F;sh</span><br><span class="line">pkill sslocal</span><br><span class="line">nohup sslocal -s xxx.xxx.xxx.xxx -p xxx -k xxxx -m xxx -l 1080 &amp;</span><br></pre></td></tr></table></figure>
+<h1 id="shell走代理"><a href="#shell走代理" class="headerlink" title="shell走代理"></a>shell走代理</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">pcaman -S proxychains</span><br><span class="line">&#x2F;etc&#x2F;proxychains.conf  </span><br><span class="line">ProxyList</span><br><span class="line">socks5 127.0.0.1 1080</span><br><span class="line">go!</span><br><span class="line">proxychains4 pip install xxx  </span><br></pre></td></tr></table></figure>
 
       
-    <div class="collection-year">
-      <span class="collection-header">2020</span>
     </div>
 
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-      <div class="post-meta-container">
-        <time itemprop="dateCreated"
-              datetime="2020-10-26T15:45:34+08:00"
-              content="2020-10-26">
-          10-26
-        </time>
-      </div>
+    
+    
+    
 
-      <div class="post-title">
-          <a class="post-title-link" href="/2020/10/26/basic-class-04/" itemprop="url">
-            <span itemprop="name">二叉树</span>
-          </a>
-      </div>
-
+    <footer class="post-footer">
+        <div class="post-eof"></div>
       
-    </header>
+    </footer>
   </article>
-
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-      <div class="post-meta-container">
-        <time itemprop="dateCreated"
-              datetime="2020-09-24T15:43:56+08:00"
-              content="2020-09-24">
-          09-24
-        </time>
-      </div>
-
-      <div class="post-title">
-          <a class="post-title-link" href="/2020/09/24/basic-class-03/" itemprop="url">
-            <span itemprop="name">线性数据结构</span>
-          </a>
-      </div>
-
-      
-    </header>
-  </article>
-
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-      <div class="post-meta-container">
-        <time itemprop="dateCreated"
-              datetime="2020-09-09T20:09:15+08:00"
-              content="2020-09-09">
-          09-09
-        </time>
-      </div>
-
-      <div class="post-title">
-          <a class="post-title-link" href="/2020/09/09/sort2/" itemprop="url">
-            <span itemprop="name">Sort2</span>
-          </a>
-      </div>
-
-      
-    </header>
-  </article>
-
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-      <div class="post-meta-container">
-        <time itemprop="dateCreated"
-              datetime="2020-09-08T17:09:48+08:00"
-              content="2020-09-08">
-          09-08
-        </time>
-      </div>
-
-      <div class="post-title">
-          <a class="post-title-link" href="/2020/09/08/sort/" itemprop="url">
-            <span itemprop="name">Sort1</span>
-          </a>
-      </div>
-
-      
-    </header>
-  </article>
-
-
-    </div>
-  </div>
   
   
   
 
+
   
+  <nav class="pagination">
+    <a class="extend prev" rel="prev" href="/page/2/"><i class="fa fa-angle-left" aria-label="Previous page"></i></a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span>
+  </nav>
 
 
 

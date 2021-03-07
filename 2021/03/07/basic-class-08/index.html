@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.1.1">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.14.0/css/all.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css">
+
+<script class="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Mist","version":"8.0.0","exturl":false,"sidebar":{"position":"right","display":"post","padding":35,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}};
+  </script>
+
+  <meta name="description" content="介绍递归和动态规划。  暴力递归： 把问题转化为规模缩小了的同类问题的子问题 有明确的不需要继续进行递归的条件（base case） 有当得到了子问题的结果之后的决策过程 不记录每一个子问题的解   动态规划： 从暴力递归中来 将每一个子问题的解记录下来，避免重复计算 把暴力递归的过程，抽象成了状态表达 并且存在化简状态表达，使其更加简洁的可能">
+<meta property="og:type" content="article">
+<meta property="og:title" content="递归和动态规划">
+<meta property="og:url" content="http://example.com/2021/03/07/basic-class-08/index.html">
+<meta property="og:site_name" content="Fivelike">
+<meta property="og:description" content="介绍递归和动态规划。  暴力递归： 把问题转化为规模缩小了的同类问题的子问题 有明确的不需要继续进行递归的条件（base case） 有当得到了子问题的结果之后的决策过程 不记录每一个子问题的解   动态规划： 从暴力递归中来 将每一个子问题的解记录下来，避免重复计算 把暴力递归的过程，抽象成了状态表达 并且存在化简状态表达，使其更加简洁的可能">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2021-03-07T10:03:52.000Z">
+<meta property="article:modified_time" content="2021-03-07T14:39:30.853Z">
+<meta property="article:author" content="Fivelike">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="http://example.com/2021/03/07/basic-class-08/">
+
+
+<script class="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>递归和动态规划 | Fivelike</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  body { margin-top: 2rem; }
+
+  .use-motion .menu-item,
+  .use-motion .sidebar,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header {
+    visibility: visible;
+  }
+
+  .use-motion .header,
+  .use-motion .site-brand-container .toggle,
+  .use-motion .footer { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle,
+  .use-motion .custom-logo-image {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line {
+    transform: scaleX(1);
+  }
+
+  .search-pop-overlay, .sidebar-nav { display: none; }
+  .sidebar-panel { display: block; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">Fivelike</h1>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <section class="post-toc-wrap sidebar-panel">
+          <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%B1%82n%EF%BC%81%E7%9A%84%E7%BB%93%E6%9E%9C"><span class="nav-number">1.</span> <span class="nav-text">求n！的结果</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%B1%89%E8%AF%BA%E5%A1%94%E9%97%AE%E9%A2%98"><span class="nav-number">2.</span> <span class="nav-text">汉诺塔问题</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%89%93%E5%8D%B0%E4%B8%80%E4%B8%AA%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%85%A8%E9%83%A8%E7%9A%84%E5%AD%90%E5%BA%8F%E5%88%97%EF%BC%8C%E5%8C%85%E6%8B%AC%E7%A9%BA%E5%AD%97%E7%AC%A6%E4%B8%B2"><span class="nav-number">3.</span> <span class="nav-text">打印一个字符串全部的子序列，包括空字符串</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%89%93%E5%8D%B0%E4%B8%80%E4%B8%AA%E5%AD%97%E7%AC%A6%E4%B8%B2%E7%9A%84%E5%85%A8%E6%8E%92%E5%88%97"><span class="nav-number">4.</span> <span class="nav-text">打印一个字符串的全排列</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%89%9B%E7%94%9F%E7%89%9B"><span class="nav-number">5.</span> <span class="nav-text">牛生牛</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%80%92%E5%BD%92%E9%80%86%E5%BA%8F%E6%A0%88"><span class="nav-number">6.</span> <span class="nav-text">递归逆序栈</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%9C%80%E5%B0%8F%E8%B7%AF%E5%BE%84%E5%92%8C"><span class="nav-number">7.</span> <span class="nav-text">最小路径和</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%B4%AF%E5%8A%A0%E6%B1%82%E5%92%8C%E5%88%A4%E6%96%AD"><span class="nav-number">8.</span> <span class="nav-text">累加求和判断</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%83%8C%E5%8C%85%E9%97%AE%E9%A2%98"><span class="nav-number">9.</span> <span class="nav-text">背包问题</span></a></li></ol></div>
+      </section>
+      <!--/noindex-->
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Fivelike"
+      src="/uploads/avatar.gif">
+  <p class="site-author-name" itemprop="name">Fivelike</p>
+  <div class="site-description" itemprop="description">Whatever is worth doing is worth doing well.</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">13</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/fivelike" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;fivelike" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://weibo.com/u/5665256865" title="Weibo → https:&#x2F;&#x2F;weibo.com&#x2F;u&#x2F;5665256865" rel="noopener" target="_blank"><i class="fab fa-weibo fa-fw"></i>Weibo</a>
+      </span>
+  </div>
+
+
+  <div class="links-of-blogroll animated">
+    <div class="links-of-blogroll-title"><i class="fa fa-globe fa-fw"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="http://shrik3.com/" title="http:&#x2F;&#x2F;shrik3.com&#x2F;" rel="noopener" target="_blank">shrik3</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://reachdong.github.io/" title="http:&#x2F;&#x2F;reachdong.github.io&#x2F;" rel="noopener" target="_blank">ReachDong</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://zenner006.github.io/" title="http:&#x2F;&#x2F;zenner006.github.io&#x2F;" rel="noopener" target="_blank">zenner006</a>
+        </li>
+    </ul>
+  </div>
+
+      </section>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+      
+
+      
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/03/07/basic-class-08/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/avatar.gif">
+      <meta itemprop="name" content="Fivelike">
+      <meta itemprop="description" content="Whatever is worth doing is worth doing well.">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Fivelike">
+    </span>
+
+    
+    
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          递归和动态规划
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+      
+
+      <time title="Created: 2021-03-07 18:03:52 / Modified: 22:39:30" itemprop="dateCreated datePublished" datetime="2021-03-07T18:03:52+08:00">2021-03-07</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E7%AE%97%E6%B3%95/" itemprop="url" rel="index"><span itemprop="name">算法</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p>介绍递归和动态规划。</p>
+<ul>
+<li>暴力递归：<ol>
+<li>把问题转化为规模缩小了的同类问题的子问题</li>
+<li>有明确的不需要继续进行递归的条件（base case）</li>
+<li>有当得到了子问题的结果之后的决策过程</li>
+<li>不记录每一个子问题的解</li>
+</ol>
+</li>
+<li>动态规划：<ol>
+<li>从暴力递归中来</li>
+<li>将每一个子问题的解记录下来，避免重复计算</li>
+<li>把暴力递归的过程，抽象成了状态表达</li>
+<li>并且存在化简状态表达，使其更加简洁的可能</li>
+</ol>
+</li>
+</ul>
+<a id="more"></a>
+
+<h4 id="求n！的结果"><a href="#求n！的结果" class="headerlink" title="求n！的结果"></a>求n！的结果</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Code_01_Factorial</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">long</span> <span class="title">getFactorial1</span><span class="params">(<span class="keyword">int</span> n)</span></span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(n==<span class="number">1</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="number">1L</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> (<span class="keyword">long</span>) n*getFactorial1(n-<span class="number">1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">long</span> <span class="title">getFactorial2</span><span class="params">(<span class="keyword">int</span> n)</span></span>&#123;</span><br><span class="line">        <span class="keyword">long</span> result=<span class="number">1</span>;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= n; i++) &#123;</span><br><span class="line">            result*=i;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> result;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="汉诺塔问题"><a href="#汉诺塔问题" class="headerlink" title="汉诺塔问题"></a>汉诺塔问题</h4><ul>
+<li>打印n层汉诺塔从最左边移动到最右边的全部过程</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Code_02_Hanoi</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">process</span><span class="params">(<span class="keyword">int</span> N, String from, String to, String help)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (N == <span class="number">1</span>) &#123;</span><br><span class="line">            System.out.println(<span class="string">&quot;Move 1 from &quot;</span> + from + <span class="string">&quot; to &quot;</span> + to);</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            process(N - <span class="number">1</span>, from, help, to);</span><br><span class="line">            System.out.println(<span class="string">&quot;Move &quot;</span> + N + <span class="string">&quot; from &quot;</span> + from + <span class="string">&quot; to &quot;</span> + to);</span><br><span class="line">            process(N - <span class="number">1</span>, help, to, from);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>T(N) = 2T(N-1)+1</li>
+</ul>
+<h4 id="打印一个字符串全部的子序列，包括空字符串"><a href="#打印一个字符串全部的子序列，包括空字符串" class="headerlink" title="打印一个字符串全部的子序列，包括空字符串"></a>打印一个字符串全部的子序列，包括空字符串</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Code_03_Print_All_Subsequences</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">printAllsub</span><span class="params">(<span class="keyword">char</span>[] str, <span class="keyword">int</span> i, String res)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (i == str.length) &#123;</span><br><span class="line">            System.out.println(res);</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        printAllsub(str, i + <span class="number">1</span>, res);</span><br><span class="line">        printAllsub(str, i + <span class="number">1</span>, res + String.valueOf(str[i]));</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        String test = <span class="string">&quot;abc&quot;</span>;</span><br><span class="line">        printAllsub(test.toCharArray(), <span class="number">0</span>, <span class="string">&quot;&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="打印一个字符串的全排列"><a href="#打印一个字符串的全排列" class="headerlink" title="打印一个字符串的全排列"></a>打印一个字符串的全排列</h4><ul>
+<li>打印一个字符串的全部排列，要求不要出现重复的排列</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> java.util.HashSet;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Code_04_Print_All_Permutations</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">printAllPermutations1</span><span class="params">(String str)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">char</span>[] chs = str.toCharArray();</span><br><span class="line">        process1(chs, <span class="number">0</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">process1</span><span class="params">(<span class="keyword">char</span>[] chs, <span class="keyword">int</span> i)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (i == chs.length) &#123;</span><br><span class="line">            System.out.println(String.valueOf(chs));</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> j = i; j &lt; chs.length; j++) &#123;</span><br><span class="line">            swap(chs, i, j);</span><br><span class="line">            process1(chs, i + <span class="number">1</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">printAllPermutations2</span><span class="params">(String str)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">char</span>[] chs = str.toCharArray();</span><br><span class="line">        process2(chs, <span class="number">0</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">process2</span><span class="params">(<span class="keyword">char</span>[] chs, <span class="keyword">int</span> i)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (i == chs.length) &#123;</span><br><span class="line">            System.out.println(String.valueOf(chs));</span><br><span class="line">        &#125;</span><br><span class="line">        HashSet&lt;Character&gt; set = <span class="keyword">new</span> HashSet&lt;&gt;();</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> j = i; j &lt; chs.length; j++) &#123;</span><br><span class="line">            <span class="keyword">if</span> (!set.contains(chs[j])) &#123;</span><br><span class="line">                set.add(chs[j]);</span><br><span class="line">                swap(chs, i, j);</span><br><span class="line">                process2(chs, i + <span class="number">1</span>);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">swap</span><span class="params">(<span class="keyword">char</span>[] chs, <span class="keyword">int</span> i, <span class="keyword">int</span> j)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">char</span> tmp = chs[i];</span><br><span class="line">        chs[i] = chs[j];</span><br><span class="line">        chs[j] = tmp;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        String test1 = <span class="string">&quot;abc&quot;</span>;</span><br><span class="line">        printAllPermutations1(test1);</span><br><span class="line">        System.out.println(<span class="string">&quot;======&quot;</span>);</span><br><span class="line">        printAllPermutations2(test1);</span><br><span class="line">        System.out.println(<span class="string">&quot;======&quot;</span>);</span><br><span class="line"></span><br><span class="line">        String test2 = <span class="string">&quot;acc&quot;</span>;</span><br><span class="line">        printAllPermutations1(test2);</span><br><span class="line">        System.out.println(<span class="string">&quot;======&quot;</span>);</span><br><span class="line">        printAllPermutations2(test2);</span><br><span class="line">        System.out.println(<span class="string">&quot;======&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="牛生牛"><a href="#牛生牛" class="headerlink" title="牛生牛"></a>牛生牛</h4><ul>
+<li>母牛每年生一只母牛，新出生的母牛成长三年后也能每年生已知母牛，假设不会死，求N年后，母牛的数量。</li>
+<li>进阶：如果每只母牛只能活10年，求N年后，母牛的数量。</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Code_05_Cow</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">cowNumber1</span><span class="params">(<span class="keyword">int</span> n)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (n &lt; <span class="number">1</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (n == <span class="number">1</span> || n == <span class="number">2</span> || n == <span class="number">3</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> n;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> cowNumber1(n - <span class="number">1</span>) + cowNumber1(n - <span class="number">3</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">cowNumber2</span><span class="params">(<span class="keyword">int</span> n)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (n &lt; <span class="number">1</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (n == <span class="number">1</span> || n == <span class="number">2</span> || n == <span class="number">3</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> n;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">int</span> res = <span class="number">3</span>;</span><br><span class="line">        <span class="keyword">int</span> pre = <span class="number">2</span>;</span><br><span class="line">        <span class="keyword">int</span> prepre = <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">int</span> tmp1 = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">int</span> tmp2 = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">4</span>; i &lt;= n; i++) &#123;</span><br><span class="line">            tmp1 = res;</span><br><span class="line">            tmp2 = pre;</span><br><span class="line">            res = res + prepre;</span><br><span class="line">            pre = tmp1;</span><br><span class="line">            prepre = tmp2;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>O(N)   ,所有递推式，比如斐波那契数列，都有O(logN)的解。</li>
+</ul>
+<h4 id="递归逆序栈"><a href="#递归逆序栈" class="headerlink" title="递归逆序栈"></a>递归逆序栈</h4><p>给你一个栈，请你逆序这个栈，不能申请额外的数据结构，只能 使用递归函数。如何实现？</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> java.util.Stack;</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Code_06_ReverseStackUsingRecursive</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">reverse</span><span class="params">(Stack&lt;Integer&gt; stack)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (stack.isEmpty()) &#123;</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">int</span> i = getAndRemoveLastElement(stack);</span><br><span class="line">        reverse(stack);</span><br><span class="line">        stack.push(i);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">getAndRemoveLastElement</span><span class="params">(Stack&lt;Integer&gt; stack)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> result = stack.pop();</span><br><span class="line">        <span class="keyword">if</span> (stack.isEmpty()) &#123;</span><br><span class="line">            <span class="keyword">return</span> result;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="keyword">int</span> last = getAndRemoveLastElement(stack);</span><br><span class="line">            stack.push(result);</span><br><span class="line">            <span class="keyword">return</span> last;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="最小路径和"><a href="#最小路径和" class="headerlink" title="最小路径和"></a>最小路径和</h4><ul>
+<li>给你一个二维数组，二维数组中的每个数都是正数，要求从左上角走到右下角，每一步只能向右或者向下。沿途经过的数字要累 加起来。返回最小的路径和。</li>
+</ul>
+<p>有重复计算且是无后效性问题，（即可变参数固定，返回值一定）可以改成动态规划</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Code_07_MinPath</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">process1</span><span class="params">(<span class="keyword">int</span>[][] matrix, <span class="keyword">int</span> i, <span class="keyword">int</span> j)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (i == matrix.length - <span class="number">1</span> &amp;&amp; j == matrix[<span class="number">0</span>].length - <span class="number">1</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> matrix[i][j];</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (i == matrix.length - <span class="number">1</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> matrix[i][j] + process1(matrix, i, j + <span class="number">1</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (j == matrix[<span class="number">0</span>].length - <span class="number">1</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> matrix[i][j] + process1(matrix, i + <span class="number">1</span>, j);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">int</span> right = process1(matrix, i, j + <span class="number">1</span>);</span><br><span class="line">        <span class="keyword">int</span> down = process1(matrix, i + <span class="number">1</span>, j);</span><br><span class="line">        <span class="keyword">return</span> matrix[i][j] + Math.min(right, down);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">minPath2</span><span class="params">(<span class="keyword">int</span>[][] m)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (m == <span class="keyword">null</span> || m.length == <span class="number">0</span> || m[<span class="number">0</span>] == <span class="keyword">null</span> || m[<span class="number">0</span>].length == <span class="number">0</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">int</span> row = m.length;</span><br><span class="line">        <span class="keyword">int</span> col = m[<span class="number">0</span>].length;</span><br><span class="line">        <span class="keyword">int</span>[][] dp = <span class="keyword">new</span> <span class="keyword">int</span>[row][col];</span><br><span class="line">        dp[<span class="number">0</span>][<span class="number">0</span>] = m[<span class="number">0</span>][<span class="number">0</span>];</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt; row; i++) &#123;</span><br><span class="line">            dp[i][<span class="number">0</span>] = dp[i - <span class="number">1</span>][<span class="number">0</span>] + m[i][<span class="number">0</span>];</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">1</span>; j &lt; col; j++) &#123;</span><br><span class="line">            dp[<span class="number">0</span>][j] = dp[<span class="number">0</span>][j - <span class="number">1</span>] + m[<span class="number">0</span>][j];</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt; row; i++) &#123;</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">1</span>; j &lt; col; j++) &#123;</span><br><span class="line">                dp[i][j] = Math.min(dp[i - <span class="number">1</span>][j], dp[i][j - <span class="number">1</span>]) + m[i][j];</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> dp[row - <span class="number">1</span>][col - <span class="number">1</span>];</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// for test</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span>[][] generateRandomMatrix(<span class="keyword">int</span> rowSize, <span class="keyword">int</span> colSize) &#123;</span><br><span class="line">        <span class="keyword">if</span> (rowSize &lt; <span class="number">0</span> || colSize &lt; <span class="number">0</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">int</span>[][] result = <span class="keyword">new</span> <span class="keyword">int</span>[rowSize][colSize];</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i != result.length; i++) &#123;</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>; j != result[<span class="number">0</span>].length; j++) &#123;</span><br><span class="line">                result[i][j] = (<span class="keyword">int</span>) (Math.random() * <span class="number">10</span>);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> result;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span>[][] m = &#123;&#123;<span class="number">1</span>, <span class="number">3</span>, <span class="number">5</span>, <span class="number">9</span>&#125;, &#123;<span class="number">8</span>, <span class="number">1</span>, <span class="number">3</span>, <span class="number">4</span>&#125;, &#123;<span class="number">5</span>, <span class="number">0</span>, <span class="number">6</span>, <span class="number">1</span>&#125;, &#123;<span class="number">8</span>, <span class="number">8</span>, <span class="number">4</span>, <span class="number">0</span>&#125;&#125;;</span><br><span class="line">        System.out.println(process1(m, <span class="number">0</span>, <span class="number">0</span>));</span><br><span class="line">        System.out.println(minPath2(m));</span><br><span class="line"></span><br><span class="line">        m = generateRandomMatrix(<span class="number">6</span>, <span class="number">7</span>);</span><br><span class="line">        System.out.println(process1(m, <span class="number">0</span>, <span class="number">0</span>));</span><br><span class="line">        System.out.println(minPath2(m));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="累加求和判断"><a href="#累加求和判断" class="headerlink" title="累加求和判断"></a>累加求和判断</h4><ul>
+<li>给你一个数组arr，和一个整数aim。如果可以任意选择arr中的 数字，能不能累加得到aim，返回true或者false</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Code_08_Money_Problem</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">boolean</span> <span class="title">money1</span><span class="params">(<span class="keyword">int</span>[] arr, <span class="keyword">int</span> aim)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> isSum(arr, <span class="number">0</span>, <span class="number">0</span>, aim);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">boolean</span> <span class="title">isSum</span><span class="params">(<span class="keyword">int</span>[] arr, <span class="keyword">int</span> i, <span class="keyword">int</span> sum, <span class="keyword">int</span> aim)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (i == arr.length) &#123;</span><br><span class="line">            <span class="keyword">return</span> sum == aim;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> isSum(arr, i + <span class="number">1</span>, sum, aim) || isSum(arr, i + <span class="number">1</span>, sum + arr[i], aim);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">boolean</span> <span class="title">money2</span><span class="params">(<span class="keyword">int</span>[] arr, <span class="keyword">int</span> aim)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">boolean</span>[][] dp = <span class="keyword">new</span> <span class="keyword">boolean</span>[arr.length + <span class="number">1</span>][aim + <span class="number">1</span>];</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; dp.length; i++) &#123;</span><br><span class="line">            dp[i][aim] = <span class="keyword">true</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = arr.length - <span class="number">1</span>; i &gt;= <span class="number">0</span>; i--) &#123;</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> j = aim - <span class="number">1</span>; j &gt;= <span class="number">0</span>; j--) &#123;</span><br><span class="line">                dp[i][j] = dp[i + <span class="number">1</span>][j];</span><br><span class="line">                <span class="keyword">if</span> (j + arr[i] &lt;= aim) &#123;</span><br><span class="line">                    dp[i][j] = dp[i][j] || dp[i + <span class="number">1</span>][j + arr[i]];</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> dp[<span class="number">0</span>][<span class="number">0</span>];</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span>[] arr = &#123;<span class="number">1</span>, <span class="number">4</span>, <span class="number">8</span>&#125;;</span><br><span class="line">        <span class="keyword">int</span> aim = <span class="number">12</span>;</span><br><span class="line">        System.out.println(money1(arr, aim));</span><br><span class="line">        System.out.println(money2(arr, aim));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="背包问题"><a href="#背包问题" class="headerlink" title="背包问题"></a>背包问题</h4><ul>
+<li>给定两个数组w和v，两个数组长度相等，w[i]表示第i件商品的重量，v[i]表示第i件商品的价值。 再给定一个整数bag，要求你挑选商品的重量加起来一定不能超过bag，返回满足这个条件 下，你能获得的最大价值。</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Code_09_Knapsack</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">maxValue1</span><span class="params">(<span class="keyword">int</span>[] c, <span class="keyword">int</span>[] p, <span class="keyword">int</span> bag)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> process1(c, p, <span class="number">0</span>, <span class="number">0</span>, bag);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">process1</span><span class="params">(<span class="keyword">int</span>[] weights, <span class="keyword">int</span>[] values, <span class="keyword">int</span> i, <span class="keyword">int</span> alreadyweight, <span class="keyword">int</span> bag)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (alreadyweight &gt; bag) &#123;</span><br><span class="line">            <span class="keyword">return</span> Integer.MIN_VALUE;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (i == weights.length) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> Math.max(</span><br><span class="line">                process1(weights, values, i + <span class="number">1</span>, alreadyweight, bag),</span><br><span class="line">                values[i] + process1(weights, values, i + <span class="number">1</span>, alreadyweight + weights[i], bag));</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">maxValue2</span><span class="params">(<span class="keyword">int</span>[] c, <span class="keyword">int</span>[] p, <span class="keyword">int</span> bag)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span>[][] dp = <span class="keyword">new</span> <span class="keyword">int</span>[c.length + <span class="number">1</span>][bag + <span class="number">1</span>];</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = c.length - <span class="number">1</span>; i &gt;= <span class="number">0</span>; i--) &#123;</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> j = bag; j &gt;= <span class="number">0</span>; j--) &#123;</span><br><span class="line">                dp[i][j] = dp[i + <span class="number">1</span>][j];</span><br><span class="line">                <span class="keyword">if</span> (j + c[i] &lt;= bag) &#123;</span><br><span class="line">                    dp[i][j] = Math.max(dp[i][j], p[i] + dp[i + <span class="number">1</span>][j + c[i]]);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> dp[<span class="number">0</span>][<span class="number">0</span>];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2021/03/07/basic-class-07/" rel="prev" title="前缀树 & 贪心">
+                  <i class="fa fa-chevron-left"></i> 前缀树 & 贪心
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+  
+  
+  
+
+
+
+      
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      const activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      const commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      
+
+      
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Fivelike</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/mist/" class="theme-link" rel="noopener" target="_blank">NexT.Mist</a>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="//cdn.jsdelivr.net/npm/animejs@3.2.0/lib/anime.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
