@@ -22,20 +22,27 @@
     var CONFIG = {"hostname":"example.com","root":"/","scheme":"Mist","version":"8.0.0","exturl":false,"sidebar":{"position":"right","display":"post","padding":35,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}};
   </script>
 
-  <meta name="description" content="记录一下实验室服务器增加用户的一些设置。。。 登录1ssh yu@192.168.1.2 (yu为root权限用户)  创建用户目录123&#x2F;data 挂载了ssd&#x2F;home  在两个目录下创建用户文件夹 添加用户并更改目录所属123456useradd usernameuseradd -m username #-m创建家目录passwd usernamechown -R use">
+  <meta name="description" content="AUC的全称是Area Under ROC，及ROC曲线与坐标轴形成的面积，取值范围[0,1]。这个指标想要表达的含义，简单说是随机抽出一对样本(一个正样本，一个负样本)，然后训练得到的分类器来对这两个样本进行预测，预测得到正样本的概率大于负样本概率的概率。 AUC &#x3D; P(P正样本&gt;P负样本)">
 <meta property="og:type" content="article">
-<meta property="og:title" content="实验室VPS用户设置">
-<meta property="og:url" content="http://example.com/2019/07/08/VPS-useradd/index.html">
+<meta property="og:title" content="AUC里的道道">
+<meta property="og:url" content="http://example.com/2021/04/25/metrics/index.html">
 <meta property="og:site_name" content="Fivelike">
-<meta property="og:description" content="记录一下实验室服务器增加用户的一些设置。。。 登录1ssh yu@192.168.1.2 (yu为root权限用户)  创建用户目录123&#x2F;data 挂载了ssd&#x2F;home  在两个目录下创建用户文件夹 添加用户并更改目录所属123456useradd usernameuseradd -m username #-m创建家目录passwd usernamechown -R use">
+<meta property="og:description" content="AUC的全称是Area Under ROC，及ROC曲线与坐标轴形成的面积，取值范围[0,1]。这个指标想要表达的含义，简单说是随机抽出一对样本(一个正样本，一个负样本)，然后训练得到的分类器来对这两个样本进行预测，预测得到正样本的概率大于负样本概率的概率。 AUC &#x3D; P(P正样本&gt;P负样本)">
 <meta property="og:locale" content="en_US">
-<meta property="article:published_time" content="2019-07-08T09:10:37.000Z">
-<meta property="article:modified_time" content="2019-08-05T03:47:48.000Z">
+<meta property="og:image" content="http://example.com/2021/04/25/metrics/image-20210425153200018.png">
+<meta property="og:image" content="http://example.com/2021/04/25/metrics/image-20210425173451742.png">
+<meta property="og:image" content="http://example.com/2021/04/25/metrics/image-20210425164758683.png">
+<meta property="og:image" content="http://example.com/2021/04/25/metrics/image-20210425164820348.png">
+<meta property="og:image" content="http://example.com/2021/04/25/metrics/image-20210425165905198.png">
+<meta property="og:image" content="http://example.com/2021/04/25/metrics/image-20210425171740410.png">
+<meta property="article:published_time" content="2021-04-25T07:12:51.000Z">
+<meta property="article:modified_time" content="2021-04-25T09:55:44.604Z">
 <meta property="article:author" content="Fivelike">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/2021/04/25/metrics/image-20210425153200018.png">
 
 
-<link rel="canonical" href="http://example.com/2019/07/08/VPS-useradd/">
+<link rel="canonical" href="http://example.com/2021/04/25/metrics/">
 
 
 <script class="page-configurations">
@@ -48,7 +55,7 @@
   };
 </script>
 
-  <title>实验室VPS用户设置 | Fivelike</title>
+  <title>AUC里的道道 | Fivelike</title>
   
 
 
@@ -175,7 +182,7 @@
 
       <!--noindex-->
       <section class="post-toc-wrap sidebar-panel">
-          <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%99%BB%E5%BD%95"><span class="nav-number">1.</span> <span class="nav-text">登录</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%9B%E5%BB%BA%E7%94%A8%E6%88%B7%E7%9B%AE%E5%BD%95"><span class="nav-number">2.</span> <span class="nav-text">创建用户目录</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B7%BB%E5%8A%A0%E7%94%A8%E6%88%B7%E5%B9%B6%E6%9B%B4%E6%94%B9%E7%9B%AE%E5%BD%95%E6%89%80%E5%B1%9E"><span class="nav-number">3.</span> <span class="nav-text">添加用户并更改目录所属</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9B%B4%E6%94%B9%E7%94%A8%E6%88%B7%E4%BF%A1%E6%81%AF"><span class="nav-number">4.</span> <span class="nav-text">更改用户信息</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#some-tips"><span class="nav-number">5.</span> <span class="nav-text">some tips</span></a></li></ol></div>
+          <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B7%B7%E6%B7%86%E7%9F%A9%E9%98%B5%E5%AE%9A%E4%B9%89"><span class="nav-number">1.</span> <span class="nav-text">混淆矩阵定义</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%87%86%E7%A1%AE%E7%8E%87%EF%BC%8C%E7%B2%BE%E7%A1%AE%E7%8E%87%EF%BC%8C%E5%8F%AC%E5%9B%9E%E7%8E%87%EF%BC%8CF1"><span class="nav-number">2.</span> <span class="nav-text">准确率，精确率，召回率，F1</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ROC%E6%9B%B2%E7%BA%BF"><span class="nav-number">3.</span> <span class="nav-text">ROC曲线</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#AUC"><span class="nav-number">4.</span> <span class="nav-text">AUC</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#AUC%E7%9A%84%E8%AE%A1%E7%AE%97%E6%96%B9%E5%BC%8F"><span class="nav-number">4.1.</span> <span class="nav-text">AUC的计算方式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#AUC%E7%9A%84%E4%BC%98%E5%8A%BF"><span class="nav-number">4.2.</span> <span class="nav-text">AUC的优势</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#AUC%E7%9A%84%E5%B1%80%E9%99%90%E6%80%A7"><span class="nav-number">4.3.</span> <span class="nav-text">AUC的局限性</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#gAUC-group-auc"><span class="nav-number">4.3.1.</span> <span class="nav-text">gAUC(group auc)</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#PR%E6%9B%B2%E7%BA%BF"><span class="nav-number">5.</span> <span class="nav-text">PR曲线</span></a></li></ol></div>
       </section>
       <!--/noindex-->
 
@@ -261,7 +268,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2019/07/08/VPS-useradd/">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/04/25/metrics/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/uploads/avatar.gif">
@@ -277,7 +284,7 @@
     
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          实验室VPS用户设置
+          AUC里的道道
         </h1>
 
         <div class="post-meta-container">
@@ -287,23 +294,17 @@
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">Posted on</span>
+      
 
-      <time title="Created: 2019-07-08 17:10:37" itemprop="dateCreated datePublished" datetime="2019-07-08T17:10:37+08:00">2019-07-08</time>
+      <time title="Created: 2021-04-25 15:12:51 / Modified: 17:55:44" itemprop="dateCreated datePublished" datetime="2021-04-25T15:12:51+08:00">2021-04-25</time>
     </span>
-      <span class="post-meta-item">
-        <span class="post-meta-item-icon">
-          <i class="far fa-calendar-check"></i>
-        </span>
-        <span class="post-meta-item-text">Edited on</span>
-        <time title="Modified: 2019-08-05 11:47:48" itemprop="dateModified" datetime="2019-08-05T11:47:48+08:00">2019-08-05</time>
-      </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
         <i class="far fa-folder"></i>
       </span>
       <span class="post-meta-item-text">In</span>
         <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/VPS/" itemprop="url" rel="index"><span itemprop="name">VPS</span></a>
+          <a href="/categories/Machine-Learning/" itemprop="url" rel="index"><span itemprop="name">Machine Learning</span></a>
         </span>
     </span>
 
@@ -317,14 +318,60 @@
     
     
     <div class="post-body" itemprop="articleBody">
-        <p>记录一下实验室服务器增加用户的一些设置。。。</p>
-<h2 id="登录"><a href="#登录" class="headerlink" title="登录"></a>登录</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh yu@192.168.1.2 (yu为root权限用户)</span><br></pre></td></tr></table></figure>
+        <p>AUC的全称是Area Under ROC，及ROC曲线与坐标轴形成的面积，取值范围[0,1]。这个指标想要表达的含义，简单说是随机抽出一对样本(一个正样本，一个负样本)，然后训练得到的分类器来对这两个样本进行预测，预测得到正样本的概率大于负样本概率的概率。</p>
+<p><code>AUC = P(P正样本&gt;P负样本)</code></p>
+<a id="more"></a>
 
-<h2 id="创建用户目录"><a href="#创建用户目录" class="headerlink" title="创建用户目录"></a>创建用户目录</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;data 挂载了ssd</span><br><span class="line">&#x2F;home  </span><br><span class="line">在两个目录下创建用户文件夹</span><br></pre></td></tr></table></figure>
-<h2 id="添加用户并更改目录所属"><a href="#添加用户并更改目录所属" class="headerlink" title="添加用户并更改目录所属"></a>添加用户并更改目录所属</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">useradd username</span><br><span class="line">useradd -m username #-m创建家目录</span><br><span class="line">passwd username</span><br><span class="line">chown -R username:username userdir</span><br><span class="line"></span><br><span class="line">userdel -r username #删除用户</span><br></pre></td></tr></table></figure>
-<h2 id="更改用户信息"><a href="#更改用户信息" class="headerlink" title="更改用户信息"></a>更改用户信息</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">sudo vim &#x2F;etc&#x2F;passwd</span><br><span class="line">username:pwd:userid:group:comment:用户家目录:shell目录</span><br><span class="line">更改用户家目录为&#x2F;home&#x2F;username</span><br></pre></td></tr></table></figure>
-<h2 id="some-tips"><a href="#some-tips" class="headerlink" title="some tips"></a>some tips</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">uname -a #查看内核&#x2F;操作系统&#x2F;CPU信息</span><br><span class="line"></span><br><span class="line">r：4 w：2 x：1    chmod</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
+<h2 id="混淆矩阵定义"><a href="#混淆矩阵定义" class="headerlink" title="混淆矩阵定义"></a>混淆矩阵定义</h2><p><img src="/2021/04/25/metrics/image-20210425153200018.png" alt="image-20210425153200018"></p>
+<ul>
+<li><strong>TP</strong>: 将正类预测为正类数</li>
+<li><strong>FN</strong>: 将正类预测为负类数</li>
+<li><strong>FP</strong>: 将负类预测为正类数</li>
+<li><strong>TN</strong>: 将负类预测为负类数</li>
+</ul>
+<h2 id="准确率，精确率，召回率，F1"><a href="#准确率，精确率，召回率，F1" class="headerlink" title="准确率，精确率，召回率，F1"></a>准确率，精确率，召回率，F1</h2><ul>
+<li><p>准确率 (Accuracy)：<code>ACC = ( TP+TN ) / (TP + TN + FP + FN)</code>，正负样本预测正确的个数与所有样本数的比值。</p>
+</li>
+<li><p>精确率 (Precision): <code>Precision = TP / (TP + FP)</code>, 查准率，即所有预测为正中，真正为正的比例。</p>
+</li>
+<li><p>召回率: <code>Recall = TP / (TP + FN)</code>，即所有正样本中，预测为正的比例（灵敏性、敏感性、查全率）。</p>
+</li>
+<li><p>F1值: <code>2/F1 = 1/Precision + 1/Recall</code>, 对Precision和Recall计算调和平均数。公式转化后为 <code>F1 = 2PR/(P + R) = 2TP/(2TP + FP + FN)</code>。精确率和召回率都高的时候，F1也会高。</p>
+</li>
+<li><p><strong>Matthews correlation coefficient</strong> (MCC) [-1,+1]：</p>
+<p><img src="/2021/04/25/metrics/image-20210425173451742.png" alt="image-20210425173451742"></p>
+</li>
+</ul>
+<h2 id="ROC曲线"><a href="#ROC曲线" class="headerlink" title="ROC曲线"></a>ROC曲线</h2><p>ROC曲线是基于样本的真实类别和预测概率来画的，x轴是伪阳率（False Positive Rate）即在所有实际为负的样本中，预测为正的比率；y轴是真阳率（True Positive Rate）即在所有实际为正的样本中，预测为正的比率。</p>
+<ul>
+<li><p><code>TPR = TP/P = TP/(TP + FN)</code></p>
+</li>
+<li><p><code>FPR = FP/N = FP/(FP + TN)</code></p>
+</li>
+</ul>
+<p>给定不同阈值，可以计算出多组（X=FPR，Y=TPR）。我们希望分类器达到的效果是：对于真实类别为1的样本，分类器预测为1的概率（即TPRate），要大于真实类别为0而预测类别为1的概率（即FPRate），即y＞x 。</p>
+<h2 id="AUC"><a href="#AUC" class="headerlink" title="AUC"></a>AUC</h2><h3 id="AUC的计算方式"><a href="#AUC的计算方式" class="headerlink" title="AUC的计算方式"></a>AUC的计算方式</h3><ol>
+<li><p>直接计算ROC曲线下面的面积。但这样做有个缺点，当多个测试样本的score相等时，调整阈值，得到的是一个斜向上的梯形，此时需要计算梯形的面积。比较麻烦。</p>
+</li>
+<li><p>分别随机从正负样本集中抽取一个正负样本，正样本的预测值大于负样本的概率。</p>
+</li>
+</ol>
+<p><img src="/2021/04/25/metrics/image-20210425164758683.png" alt="image-20210425164758683"></p>
+<p><img src="/2021/04/25/metrics/image-20210425164820348.png" alt="image-20210425164820348"></p>
+<p>M,N分别为正样本数和负样本数，时间复杂度为O(n^2)。</p>
+<ol start="3">
+<li>第三种方式与第二种方式是一样的，但优化了复杂度。首先对score从小到大排序，最大score对应的样本的rank为n，第二大为n-1，以此类推。然后将所有正样本的rank相加，再减去M-1种两个正样本组合的情况。rank n 与前n-1组合，有M-1是正样本。为简便计算，取n组，相应的不符合为M。</li>
+</ol>
+<p><img src="/2021/04/25/metrics/image-20210425165905198.png" alt="image-20210425165905198"></p>
+<p>当score相等时，需要对这些score相等的样本的rank取平均，然后再使用上述公式。</p>
+<h3 id="AUC的优势"><a href="#AUC的优势" class="headerlink" title="AUC的优势"></a>AUC的优势</h3><p>AUC的计算方法同时考虑分类器对于正例和负例的分类能力，在样本不平衡的情况下，依然能够对分类器作出合理的评价。</p>
+<p>例如在反欺诈场景，设欺诈类样本为正例，正例占比很少（假设0.1%），如果使用准确率评估，把所有的样本预测为负例，便可以获得<strong>99.9%的准确率</strong>。</p>
+<p>但是如果使用AUC，把所有样本预测为负例，TPRate和FPRate同时为0（没有Positive），与 (0,0) 和 (1,1)连接，得出<strong>AUC仅为0.5</strong>，成功规避了样本不均匀带来的问题。</p>
+<h3 id="AUC的局限性"><a href="#AUC的局限性" class="headerlink" title="AUC的局限性"></a>AUC的局限性</h3><p>AUC作为排序的评价指标本身具有一定的局限性，它衡量的是整体样本间的排序能力，对于计算广告领域来说，它衡量的是不同用户对不同广告之间的排序能力，而线上环境往往需要关注同一个用户的不同广告之间的排序能力。阿里在 [Deep Interest Network] 种提到一种改进的AUC指标，用户加权平均AUC，更能反映线上真实环境的排序能力。</p>
+<h4 id="gAUC-group-auc"><a href="#gAUC-group-auc" class="headerlink" title="gAUC(group auc)"></a>gAUC(group auc)</h4><p><img src="/2021/04/25/metrics/image-20210425171740410.png" alt="image-20210425171740410"></p>
+<p>实际处理时权重一般可以设为<strong>每个用户view或click的次数</strong>，而且会过滤掉单个用户全是正样本或负样本的情况。</p>
+<h2 id="PR曲线"><a href="#PR曲线" class="headerlink" title="PR曲线"></a>PR曲线</h2><p>x轴Recall，y轴Precision。</p>
+<p>AUPR：PR曲线下面积。</p>
 
     </div>
 
@@ -338,14 +385,11 @@
 
           <div class="post-nav">
             <div class="post-nav-item">
-                <a href="/2019/07/07/linuxtips/" rel="prev" title="ArchLinux tips">
-                  <i class="fa fa-chevron-left"></i> ArchLinux tips
+                <a href="/2021/04/03/lihang-book/" rel="prev" title="统计学习方法">
+                  <i class="fa fa-chevron-left"></i> 统计学习方法
                 </a>
             </div>
             <div class="post-nav-item">
-                <a href="/2019/07/11/git-tips/" rel="next" title="git-tips">
-                  git-tips <i class="fa fa-chevron-right"></i>
-                </a>
             </div>
           </div>
     </footer>
