@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.1.1">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.14.0/css/all.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css">
+
+<script class="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Mist","version":"8.0.0","exturl":false,"sidebar":{"position":"right","display":"post","padding":35,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}};
+  </script>
+
+  <meta name="description" content="召回算法LFM推导及自编程实现。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="LFM(Latent Factor Model)">
+<meta property="og:url" content="http://example.com/2021/05/17/lfm/index.html">
+<meta property="og:site_name" content="Fivelike">
+<meta property="og:description" content="召回算法LFM推导及自编程实现。">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://example.com/2021/05/17/lfm/image-20210517190401668.png">
+<meta property="og:image" content="http://example.com/2021/05/17/lfm/image-20210517190535310.png">
+<meta property="og:image" content="http://example.com/2021/05/17/lfm/image-20210517190555052.png">
+<meta property="og:image" content="http://example.com/2021/05/17/lfm/image-20210517190623574.png">
+<meta property="article:published_time" content="2021-05-17T10:58:06.000Z">
+<meta property="article:modified_time" content="2021-05-17T11:18:30.043Z">
+<meta property="article:author" content="Fivelike">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/2021/05/17/lfm/image-20210517190401668.png">
+
+
+<link rel="canonical" href="http://example.com/2021/05/17/lfm/">
+
+
+<script class="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>LFM(Latent Factor Model) | Fivelike</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  body { margin-top: 2rem; }
+
+  .use-motion .menu-item,
+  .use-motion .sidebar,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header {
+    visibility: visible;
+  }
+
+  .use-motion .header,
+  .use-motion .site-brand-container .toggle,
+  .use-motion .footer { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle,
+  .use-motion .custom-logo-image {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line {
+    transform: scaleX(1);
+  }
+
+  .search-pop-overlay, .sidebar-nav { display: none; }
+  .sidebar-panel { display: block; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">Fivelike</h1>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <section class="post-toc-wrap sidebar-panel">
+          <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#LFM%E6%8E%A8%E5%AF%BC"><span class="nav-number">1.</span> <span class="nav-text">LFM推导</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BB%BA%E6%A8%A1%E5%85%AC%E5%BC%8F%EF%BC%9A"><span class="nav-number">1.0.1.</span> <span class="nav-text">建模公式：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8D%9F%E5%A4%B1%E5%87%BD%E6%95%B0%EF%BC%9A"><span class="nav-number">1.0.2.</span> <span class="nav-text">损失函数：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B1%82%E5%AF%BC%EF%BC%9A"><span class="nav-number">1.0.3.</span> <span class="nav-text">求导：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AE%97%E6%B3%95%E8%BF%AD%E4%BB%A3%EF%BC%9A"><span class="nav-number">1.0.4.</span> <span class="nav-text">算法迭代：</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#LFM%E5%BA%94%E7%94%A8%E5%9C%BA%E6%99%AF%E4%B8%BE%E4%BE%8B"><span class="nav-number">2.</span> <span class="nav-text">LFM应用场景举例</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%AE%97%E6%B3%95%E5%AE%9E%E7%8E%B0"><span class="nav-number">3.</span> <span class="nav-text">算法实现</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E9%9B%86"><span class="nav-number">3.0.1.</span> <span class="nav-text">数据集</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%B4%9F%E6%A0%B7%E6%9C%AC%E9%80%89%E6%8B%A9"><span class="nav-number">3.0.2.</span> <span class="nav-text">负样本选择</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#LFM-model-train"><span class="nav-number">3.0.3.</span> <span class="nav-text">LFM model train</span></a></li></ol></li></ol></li></ol></div>
+      </section>
+      <!--/noindex-->
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Fivelike"
+      src="/uploads/avatar.gif">
+  <p class="site-author-name" itemprop="name">Fivelike</p>
+  <div class="site-description" itemprop="description">Whatever is worth doing is worth doing well.</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">17</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">7</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/fivelike" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;fivelike" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://weibo.com/u/5665256865" title="Weibo → https:&#x2F;&#x2F;weibo.com&#x2F;u&#x2F;5665256865" rel="noopener" target="_blank"><i class="fab fa-weibo fa-fw"></i>Weibo</a>
+      </span>
+  </div>
+
+
+  <div class="links-of-blogroll animated">
+    <div class="links-of-blogroll-title"><i class="fa fa-globe fa-fw"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="http://shrik3.com/" title="http:&#x2F;&#x2F;shrik3.com&#x2F;" rel="noopener" target="_blank">shrik3</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://reachdong.github.io/" title="http:&#x2F;&#x2F;reachdong.github.io&#x2F;" rel="noopener" target="_blank">ReachDong</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://zenner006.github.io/" title="http:&#x2F;&#x2F;zenner006.github.io&#x2F;" rel="noopener" target="_blank">zenner006</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://www.archipell.xyz/" title="https:&#x2F;&#x2F;www.archipell.xyz&#x2F;" rel="noopener" target="_blank">fawn</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://langjunman.github.io/" title="https:&#x2F;&#x2F;langjunman.github.io&#x2F;" rel="noopener" target="_blank">Langjx</a>
+        </li>
+    </ul>
+  </div>
+
+      </section>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+      
+
+      
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/05/17/lfm/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/avatar.gif">
+      <meta itemprop="name" content="Fivelike">
+      <meta itemprop="description" content="Whatever is worth doing is worth doing well.">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Fivelike">
+    </span>
+
+    
+    
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          LFM(Latent Factor Model)
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+      
+
+      <time title="Created: 2021-05-17 18:58:06 / Modified: 19:18:30" itemprop="dateCreated datePublished" datetime="2021-05-17T18:58:06+08:00">2021-05-17</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E6%8E%A8%E8%8D%90%E7%AE%97%E6%B3%95/" itemprop="url" rel="index"><span itemprop="name">推荐算法</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p>召回算法LFM推导及自编程实现。</p>
+<a id="more"></a>
+
+<h1 id="LFM推导"><a href="#LFM推导" class="headerlink" title="LFM推导"></a>LFM推导</h1><h3 id="建模公式："><a href="#建模公式：" class="headerlink" title="建模公式："></a>建模公式：</h3><p><img src="/2021/05/17/lfm/image-20210517190401668.png" alt="image-20210517190307815"></p>
+<h3 id="损失函数："><a href="#损失函数：" class="headerlink" title="损失函数："></a>损失函数：</h3><p><img src="/2021/05/17/lfm/image-20210517190535310.png" alt="image-20210517190535310"></p>
+<h3 id="求导："><a href="#求导：" class="headerlink" title="求导："></a>求导：</h3><p><img src="/2021/05/17/lfm/image-20210517190555052.png" alt="image-20210517190555052"></p>
+<h3 id="算法迭代："><a href="#算法迭代：" class="headerlink" title="算法迭代："></a>算法迭代：</h3><p><img src="/2021/05/17/lfm/image-20210517190623574.png" alt="image-20210517190623574"></p>
+<h1 id="LFM应用场景举例"><a href="#LFM应用场景举例" class="headerlink" title="LFM应用场景举例"></a>LFM应用场景举例</h1><ul>
+<li>计算用户toplike</li>
+<li>计算item的topsim</li>
+<li>计算item的topic</li>
+</ul>
+<h1 id="算法实现"><a href="#算法实现" class="headerlink" title="算法实现"></a>算法实现</h1><h3 id="数据集"><a href="#数据集" class="headerlink" title="数据集"></a>数据集</h3><p>movies, rating <a target="_blank" rel="noopener" href="https://movielens.org/">dataset链接</a> </p>
+<p>rating包含用户对电影的评分，生成训练样本时，设置评分的阈值为4.0，当评分&gt;=4.0时为正样本，否则为负样本。负采样使正负样本数量相同。负采样时首先计算item的平均评分，然后将负样本集合按照平均评分从高到底排序，选取前n个作为负样本。原因是如果用户对一个平均评分高的item打了低分，说明该用户很大可能不喜欢这个item。（针对其他类型的行为数据，如CTR行为等，可以采用转换率等方式进行负采样）</p>
+<h3 id="负样本选择"><a href="#负样本选择" class="headerlink" title="负样本选择"></a>负样本选择</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># -*-coding:utf8-*-</span></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">author: fivelike</span></span><br><span class="line"><span class="string">date: 2021.5.17</span></span><br><span class="line"><span class="string">util function</span></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_item_info</span>(<span class="params">input_file</span>):</span></span><br><span class="line">    <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">    get item info: [title, genre]</span></span><br><span class="line"><span class="string">    :param input_file: item info file</span></span><br><span class="line"><span class="string">    :return:</span></span><br><span class="line"><span class="string">        a dict: key: itemid, value: [title, genre]</span></span><br><span class="line"><span class="string">    &quot;&quot;&quot;</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> os.path.exists(input_file):</span><br><span class="line">        <span class="keyword">return</span> &#123;&#125;</span><br><span class="line">    item_info = &#123;&#125;</span><br><span class="line">    linenum = <span class="number">0</span></span><br><span class="line">    fp = open(input_file, encoding=<span class="string">&quot;utf-8&quot;</span>)</span><br><span class="line">    <span class="keyword">for</span> line <span class="keyword">in</span> fp:</span><br><span class="line">        <span class="keyword">if</span> linenum == <span class="number">0</span>:</span><br><span class="line">            linenum += <span class="number">1</span></span><br><span class="line">            <span class="keyword">continue</span></span><br><span class="line">        item = line.strip().split(<span class="string">&#x27;,&#x27;</span>)</span><br><span class="line">        <span class="keyword">if</span> len(item) &lt; <span class="number">3</span>:</span><br><span class="line">            <span class="keyword">continue</span></span><br><span class="line">        <span class="keyword">elif</span> len(item) == <span class="number">3</span>:</span><br><span class="line">            itemid, title, genre = item[<span class="number">0</span>], item[<span class="number">1</span>], item[<span class="number">2</span>]</span><br><span class="line">        <span class="keyword">elif</span> len(item) &gt; <span class="number">3</span>:</span><br><span class="line">            itemid = item[<span class="number">0</span>]</span><br><span class="line">            genre = item[<span class="number">-1</span>]</span><br><span class="line">            title = <span class="string">&quot;,&quot;</span>.join(item[<span class="number">1</span>: <span class="number">-1</span>])</span><br><span class="line">        item_info[itemid] = [title,genre]</span><br><span class="line">    fp.close()</span><br><span class="line">    <span class="keyword">return</span> item_info</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_ave_score</span>(<span class="params">input_file</span>):</span></span><br><span class="line">    <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">    get item ave rating score</span></span><br><span class="line"><span class="string">    :param input_file: user rating file</span></span><br><span class="line"><span class="string">    :return:</span></span><br><span class="line"><span class="string">        a dict: key: itemid, value: ave_score</span></span><br><span class="line"><span class="string">    &quot;&quot;&quot;</span></span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> os.path.exists(input_file):</span><br><span class="line">        <span class="keyword">return</span> &#123;&#125;</span><br><span class="line">    linenum = <span class="number">0</span></span><br><span class="line">    record_dict = &#123;&#125;</span><br><span class="line">    score_dict = &#123;&#125;</span><br><span class="line">    fp = open(input_file, encoding=<span class="string">&quot;utf-8&quot;</span>)</span><br><span class="line">    <span class="keyword">for</span> line <span class="keyword">in</span> fp:</span><br><span class="line">        <span class="keyword">if</span> linenum == <span class="number">0</span>:</span><br><span class="line">            linenum += <span class="number">1</span></span><br><span class="line">            <span class="keyword">continue</span></span><br><span class="line">        item = line.strip().split(<span class="string">&#x27;,&#x27;</span>)</span><br><span class="line">        <span class="keyword">if</span> len(item) &lt; <span class="number">4</span>:</span><br><span class="line">            <span class="keyword">continue</span></span><br><span class="line">        userid, itemid, rating = item[<span class="number">0</span>], item[<span class="number">1</span>], float(item[<span class="number">2</span>])</span><br><span class="line">        <span class="keyword">if</span> itemid <span class="keyword">not</span> <span class="keyword">in</span> record_dict:</span><br><span class="line">            record_dict[itemid] = [<span class="number">0</span>,<span class="number">0</span>]</span><br><span class="line">        record_dict[itemid][<span class="number">0</span>]+=<span class="number">1</span></span><br><span class="line">        record_dict[itemid][<span class="number">1</span>]+=rating</span><br><span class="line">    fp.close()</span><br><span class="line">    <span class="keyword">for</span> itemid <span class="keyword">in</span> record_dict:</span><br><span class="line">        score_dict[itemid] = round(record_dict[itemid][<span class="number">1</span>]/record_dict[itemid][<span class="number">0</span>],<span class="number">3</span>)</span><br><span class="line">    <span class="keyword">return</span> score_dict</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_train_data</span>(<span class="params">input_file</span>):</span></span><br><span class="line">    <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">    get train_data for LFM model</span></span><br><span class="line"><span class="string">    :param input_file: user_item_rating file</span></span><br><span class="line"><span class="string">    :return:</span></span><br><span class="line"><span class="string">        a list: [(userid, itemid, label)]</span></span><br><span class="line"><span class="string">    &quot;&quot;&quot;</span></span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> os.path.exists(input_file):</span><br><span class="line">        <span class="keyword">return</span> []</span><br><span class="line">    score_dict = get_ave_score(input_file)</span><br><span class="line">    neg_dict = &#123;&#125;</span><br><span class="line">    pos_dict = &#123;&#125;</span><br><span class="line">    train_data = []</span><br><span class="line">    linenum=<span class="number">0</span></span><br><span class="line">    score_thr = <span class="number">4.0</span></span><br><span class="line">    fp = open(input_file, encoding=<span class="string">&quot;utf-8&quot;</span>)</span><br><span class="line">    <span class="keyword">for</span> line <span class="keyword">in</span> fp:</span><br><span class="line">        line = line.replace(<span class="string">&#x27;\n&#x27;</span>,<span class="string">&#x27;&#x27;</span>)</span><br><span class="line">        <span class="keyword">if</span> linenum==<span class="number">0</span>:</span><br><span class="line">            linenum+=<span class="number">1</span></span><br><span class="line">            <span class="keyword">continue</span></span><br><span class="line">        item = line.strip().split(<span class="string">&#x27;,&#x27;</span>)</span><br><span class="line">        <span class="keyword">if</span> len(item)&lt;<span class="number">4</span>:</span><br><span class="line">            <span class="keyword">continue</span></span><br><span class="line">        userid, itemid, rating = item[<span class="number">0</span>],item[<span class="number">1</span>], float(item[<span class="number">2</span>])</span><br><span class="line">        <span class="keyword">if</span> userid <span class="keyword">not</span> <span class="keyword">in</span> pos_dict:</span><br><span class="line">            pos_dict[userid] = []</span><br><span class="line">        <span class="keyword">if</span> userid <span class="keyword">not</span> <span class="keyword">in</span> neg_dict:</span><br><span class="line">            neg_dict[userid] = []</span><br><span class="line">        <span class="keyword">if</span> rating &gt;= score_thr:</span><br><span class="line">            pos_dict[userid].append((itemid,<span class="number">1</span>))</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            score = score_dict.get(itemid,<span class="number">0</span>)</span><br><span class="line">            neg_dict[userid].append((itemid, score))</span><br><span class="line">    fp.close()</span><br><span class="line">    <span class="keyword">for</span> userid <span class="keyword">in</span> pos_dict:</span><br><span class="line">        data_num = min(len(pos_dict[userid]), len(neg_dict.get(userid, [])))</span><br><span class="line">        <span class="keyword">if</span> data_num&gt;<span class="number">0</span>:</span><br><span class="line">            train_data += [(userid, co[<span class="number">0</span>], co[<span class="number">1</span>]) <span class="keyword">for</span> co <span class="keyword">in</span> pos_dict[userid]][:data_num]</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            <span class="keyword">continue</span></span><br><span class="line">        <span class="comment"># 对负样本按照平均评分进行排序，element是[itemid,score]，这里表示用户如果对热门的商品评分不高，则很大可能这个用户对这个物品真的没有兴趣</span></span><br><span class="line">        sorted_neg_list = sorted(neg_dict[userid], key=<span class="keyword">lambda</span>  element:element[<span class="number">1</span>], reverse=<span class="literal">True</span>)[:data_num]</span><br><span class="line">        train_data += [(userid, co[<span class="number">0</span>], <span class="number">0</span>) <span class="keyword">for</span> co <span class="keyword">in</span> sorted_neg_list]</span><br><span class="line">    <span class="keyword">return</span> train_data</span><br></pre></td></tr></table></figure>
+
+<h3 id="LFM-model-train"><a href="#LFM-model-train" class="headerlink" title="LFM model train"></a>LFM model train</h3><p>LFM模型参数包含隐向量维度F，正则化参数，学习率，迭代次数。训练过程如下：</p>
+<ul>
+<li>对每一个用户和item使用标准正态分布初始化一个F维的向量：np.random.randn(F)</li>
+<li>根据迭代公式对user和item向量每个维度进行更新</li>
+<li>每次迭代后，学习率衰减</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># -*-coding:utf8-*-</span></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">author: fivelike</span></span><br><span class="line"><span class="string">date: 2021.5.17</span></span><br><span class="line"><span class="string">lfm(latent factor model) model train main function</span></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="keyword">from</span> tqdm <span class="keyword">import</span> tqdm</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> sys</span><br><span class="line"></span><br><span class="line">sys.path.append(<span class="string">&quot;../util&quot;</span>)</span><br><span class="line"><span class="keyword">import</span> util.read <span class="keyword">as</span> read</span><br><span class="line"><span class="keyword">import</span> operator</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">lfm_train</span>(<span class="params">train_data, F, alpha, beta, step</span>):</span></span><br><span class="line">    <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">    train lfm model</span></span><br><span class="line"><span class="string">    :param train_data: train_data for lfm</span></span><br><span class="line"><span class="string">    :param F: user_vec_len, item_vec_len</span></span><br><span class="line"><span class="string">    :param alpha: regularization factor</span></span><br><span class="line"><span class="string">    :param beta: learning rate</span></span><br><span class="line"><span class="string">    :param step: iteration num</span></span><br><span class="line"><span class="string">    :return:</span></span><br><span class="line"><span class="string">        dict: key itemid, value: ndarray</span></span><br><span class="line"><span class="string">        dict: key userid, value: ndarray</span></span><br><span class="line"><span class="string">    &quot;&quot;&quot;</span></span><br><span class="line">    user_vec = &#123;&#125;</span><br><span class="line">    item_vec = &#123;&#125;</span><br><span class="line">    <span class="keyword">for</span> step_index <span class="keyword">in</span> tqdm(range(step)):</span><br><span class="line">        <span class="keyword">for</span> data_instance <span class="keyword">in</span> train_data:</span><br><span class="line">            userid, itemid, label = data_instance</span><br><span class="line">            <span class="keyword">if</span> userid <span class="keyword">not</span> <span class="keyword">in</span> user_vec:</span><br><span class="line">                user_vec[userid] = init_model(F)</span><br><span class="line">            <span class="keyword">if</span> itemid <span class="keyword">not</span> <span class="keyword">in</span> item_vec:</span><br><span class="line">                item_vec[itemid] = init_model(F)</span><br><span class="line"></span><br><span class="line">        delta = label - model_predict(user_vec[userid], item_vec[itemid])</span><br><span class="line">        <span class="keyword">for</span> index <span class="keyword">in</span> range(F):</span><br><span class="line">            user_vec[userid][index] += beta * (delta * item_vec[itemid][index] - alpha * user_vec[userid][index])</span><br><span class="line">            item_vec[itemid][index] += beta * (delta * user_vec[userid][index] - alpha * item_vec[itemid][index])</span><br><span class="line"></span><br><span class="line">        beta = beta * <span class="number">0.9</span></span><br><span class="line">    <span class="keyword">return</span> user_vec, item_vec</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">init_model</span>(<span class="params">vector_len</span>):</span></span><br><span class="line">    <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">    init len vector</span></span><br><span class="line"><span class="string">    :param vector_len: the length of vector</span></span><br><span class="line"><span class="string">    :return:</span></span><br><span class="line"><span class="string">        a ndarray</span></span><br><span class="line"><span class="string">    &quot;&quot;&quot;</span></span><br><span class="line">    <span class="keyword">return</span> np.random.randn(vector_len)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">model_predict</span>(<span class="params">user_vector, item_vector</span>):</span></span><br><span class="line">    <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">    user_vector and item_vector distance</span></span><br><span class="line"><span class="string">    :param user_vector: model produce user vector</span></span><br><span class="line"><span class="string">    :param item_vector: model produce item vector</span></span><br><span class="line"><span class="string">    :return:</span></span><br><span class="line"><span class="string">        a num</span></span><br><span class="line"><span class="string">    &quot;&quot;&quot;</span></span><br><span class="line">    res = np.dot(user_vector, item_vector) / (np.linalg.norm(user_vector) * np.linalg.norm(item_vector))</span><br><span class="line">    <span class="keyword">return</span> res</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">model_train_process</span>():</span></span><br><span class="line">    <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">    test lfm model train</span></span><br><span class="line"><span class="string">    :return:</span></span><br><span class="line"><span class="string">    &quot;&quot;&quot;</span></span><br><span class="line">    train_data = read.get_train_data(<span class="string">&quot;../data/ratings.csv&quot;</span>)</span><br><span class="line">    user_vec, item_vec = lfm_train(train_data, <span class="number">50</span>, <span class="number">0.01</span>, <span class="number">0.1</span>, <span class="number">50</span>)</span><br><span class="line">    recom_result = give_recom_result(user_vec, item_vec, <span class="string">&#x27;24&#x27;</span>)</span><br><span class="line">    ana_recom_result(train_data, <span class="string">&#x27;24&#x27;</span>, recom_result)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">give_recom_result</span>(<span class="params">user_vec, item_vec, userid</span>):</span></span><br><span class="line">    <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">    user lfm model result give fix userid recom result</span></span><br><span class="line"><span class="string">    :param user_vec: lfm model result</span></span><br><span class="line"><span class="string">    :param item_vec: lfm model result</span></span><br><span class="line"><span class="string">    :param userid: fix userid</span></span><br><span class="line"><span class="string">    :return: a list: [(itemid, score),...]</span></span><br><span class="line"><span class="string">    &quot;&quot;&quot;</span></span><br><span class="line">    fix_num = <span class="number">10</span></span><br><span class="line">    <span class="keyword">if</span> userid <span class="keyword">not</span> <span class="keyword">in</span> user_vec:</span><br><span class="line">        <span class="keyword">return</span> []</span><br><span class="line">    record = &#123;&#125;</span><br><span class="line">    recom_list = []</span><br><span class="line">    user_vector = user_vec[userid]</span><br><span class="line">    <span class="keyword">for</span> itemid <span class="keyword">in</span> item_vec:</span><br><span class="line">        item_vector = item_vec[itemid]</span><br><span class="line">        res = np.dot(user_vector, item_vector) / (np.linalg.norm(user_vector) * np.linalg.norm(item_vector))</span><br><span class="line">        record[itemid] = res</span><br><span class="line">    <span class="keyword">for</span> r <span class="keyword">in</span> sorted(record.items(), key=operator.itemgetter(<span class="number">1</span>), reverse=<span class="literal">True</span>)[:fix_num]:</span><br><span class="line">        itemid = r[<span class="number">0</span>]</span><br><span class="line">        score = round(r[<span class="number">1</span>], <span class="number">3</span>)</span><br><span class="line">        recom_list.append((itemid, score))</span><br><span class="line">    <span class="keyword">return</span> recom_list</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">ana_recom_result</span>(<span class="params">train_data, userid, recom_list</span>):</span></span><br><span class="line">    <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">    debug recom result for userid</span></span><br><span class="line"><span class="string">    :param train_data: train data for lfm model</span></span><br><span class="line"><span class="string">    :param userid: fix userid</span></span><br><span class="line"><span class="string">    :param recom_list: recom result by lfm</span></span><br><span class="line"><span class="string">    &quot;&quot;&quot;</span></span><br><span class="line">    item_info = read.get_item_info(<span class="string">&quot;../data/movies.csv&quot;</span>)</span><br><span class="line">    <span class="keyword">for</span> data_instance <span class="keyword">in</span> train_data:</span><br><span class="line">        tmp_userid, itemid, label = data_instance</span><br><span class="line">        <span class="keyword">if</span> tmp_userid == userid <span class="keyword">and</span> label == <span class="number">1</span>:</span><br><span class="line">            print(item_info[itemid])</span><br><span class="line">    print(<span class="string">&quot;recom result&quot;</span>)</span><br><span class="line">    <span class="keyword">for</span> r <span class="keyword">in</span> recom_list:</span><br><span class="line">        print(item_info[r[<span class="number">0</span>]])</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    model_train_process()</span><br></pre></td></tr></table></figure>
+
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2021/04/25/word2vec/" rel="prev" title="Word2vec">
+                  <i class="fa fa-chevron-left"></i> Word2vec
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+  
+  
+  
+
+
+
+      
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      const activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      const commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      
+
+      
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Fivelike</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/mist/" class="theme-link" rel="noopener" target="_blank">NexT.Mist</a>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="//cdn.jsdelivr.net/npm/animejs@3.2.0/lib/anime.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
