@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.1.1">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.14.0/css/all.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css">
+
+<script class="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Mist","version":"8.0.0","exturl":false,"sidebar":{"position":"right","display":"post","padding":35,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}};
+  </script>
+
+  <meta name="description" content="个性化召回算法Item2Vec原理及自编程实现。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="item2Vec">
+<meta property="og:url" content="http://example.com/2021/05/26/item2Vec/index.html">
+<meta property="og:site_name" content="Fivelike">
+<meta property="og:description" content="个性化召回算法Item2Vec原理及自编程实现。">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://example.com/2021/05/26/item2Vec/image-20210526192951653.png">
+<meta property="article:published_time" content="2021-05-26T08:37:59.000Z">
+<meta property="article:modified_time" content="2021-05-26T13:38:52.177Z">
+<meta property="article:author" content="Fivelike">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/2021/05/26/item2Vec/image-20210526192951653.png">
+
+
+<link rel="canonical" href="http://example.com/2021/05/26/item2Vec/">
+
+
+<script class="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>item2Vec | Fivelike</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  body { margin-top: 2rem; }
+
+  .use-motion .menu-item,
+  .use-motion .sidebar,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header {
+    visibility: visible;
+  }
+
+  .use-motion .header,
+  .use-motion .site-brand-container .toggle,
+  .use-motion .footer { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle,
+  .use-motion .custom-logo-image {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line {
+    transform: scaleX(1);
+  }
+
+  .search-pop-overlay, .sidebar-nav { display: none; }
+  .sidebar-panel { display: block; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">Fivelike</h1>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <section class="post-toc-wrap sidebar-panel">
+          <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%AE%97%E6%B3%95%E5%8E%9F%E7%90%86"><span class="nav-number">1.</span> <span class="nav-text">算法原理</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%83%8C%E6%99%AF"><span class="nav-number">1.1.</span> <span class="nav-text">背景</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%89%A9%E7%90%86%E6%84%8F%E4%B9%89"><span class="nav-number">1.2.</span> <span class="nav-text">物理意义</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BC%BA%E9%99%B7"><span class="nav-number">1.3.</span> <span class="nav-text">缺陷</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Item2Vec%E7%AE%97%E6%B3%95%E5%BA%94%E7%94%A8%E4%B8%BB%E6%B5%81%E7%A8%8B"><span class="nav-number">1.4.</span> <span class="nav-text">Item2Vec算法应用主流程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Item2Vec%E7%AE%97%E6%B3%95%E4%BE%9D%E8%B5%96%E6%A8%A1%E5%9E%8Bword2vec"><span class="nav-number">1.5.</span> <span class="nav-text">Item2Vec算法依赖模型word2vec</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#CBOW-continuous-bag-of-words"><span class="nav-number">1.5.1.</span> <span class="nav-text">CBOW (continuous bag of words)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Skip-gram%E6%A8%A1%E5%9E%8B"><span class="nav-number">1.5.2.</span> <span class="nav-text">Skip-gram模型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%B4%9F%E9%87%87%E6%A0%B7%E7%AE%97%E6%B3%95"><span class="nav-number">1.5.3.</span> <span class="nav-text">负采样算法</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%AE%97%E6%B3%95%E5%AE%9E%E7%8E%B0"><span class="nav-number">2.</span> <span class="nav-text">算法实现</span></a></li></ol></div>
+      </section>
+      <!--/noindex-->
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Fivelike"
+      src="/uploads/avatar.gif">
+  <p class="site-author-name" itemprop="name">Fivelike</p>
+  <div class="site-description" itemprop="description">Whatever is worth doing is worth doing well.</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">19</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">7</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/fivelike" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;fivelike" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://weibo.com/u/5665256865" title="Weibo → https:&#x2F;&#x2F;weibo.com&#x2F;u&#x2F;5665256865" rel="noopener" target="_blank"><i class="fab fa-weibo fa-fw"></i>Weibo</a>
+      </span>
+  </div>
+
+
+  <div class="links-of-blogroll animated">
+    <div class="links-of-blogroll-title"><i class="fa fa-globe fa-fw"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="http://shrik3.com/" title="http:&#x2F;&#x2F;shrik3.com&#x2F;" rel="noopener" target="_blank">shrik3</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://reachdong.github.io/" title="http:&#x2F;&#x2F;reachdong.github.io&#x2F;" rel="noopener" target="_blank">ReachDong</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://zenner006.github.io/" title="http:&#x2F;&#x2F;zenner006.github.io&#x2F;" rel="noopener" target="_blank">zenner006</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://www.archipell.xyz/" title="https:&#x2F;&#x2F;www.archipell.xyz&#x2F;" rel="noopener" target="_blank">fawn</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://langjunman.github.io/" title="https:&#x2F;&#x2F;langjunman.github.io&#x2F;" rel="noopener" target="_blank">Langjx</a>
+        </li>
+    </ul>
+  </div>
+
+      </section>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+      
+
+      
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/05/26/item2Vec/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/avatar.gif">
+      <meta itemprop="name" content="Fivelike">
+      <meta itemprop="description" content="Whatever is worth doing is worth doing well.">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Fivelike">
+    </span>
+
+    
+    
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          item2Vec
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+      
+
+      <time title="Created: 2021-05-26 16:37:59 / Modified: 21:38:52" itemprop="dateCreated datePublished" datetime="2021-05-26T16:37:59+08:00">2021-05-26</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E6%8E%A8%E8%8D%90%E7%AE%97%E6%B3%95/" itemprop="url" rel="index"><span itemprop="name">推荐算法</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p>个性化召回算法Item2Vec原理及自编程实现。</p>
+<a id="more"></a>
+
+<h1 id="算法原理"><a href="#算法原理" class="headerlink" title="算法原理"></a>算法原理</h1><p>​        计算items之间的相似性是现代推荐系统中的一个关键组成部分。过去，人们只是通过判断“有无”的方式来向量化系统中的各个items，这样的方式并不能很好地表示出items之间的关系，而且泛化能力很差。因此需要一种特殊的方法来将items映射到能够满足我们需求的向量上去。<br>​        后来研究人员研究出了使用SVD（奇异值分解，矩阵分解的一种）的方式来计算表示items的向量，这种方法从某种程度上已经满足了人们在计算items的相似性以及模型泛化能力的需求了。但是随着自然语言领域不断发展，研究人员开发出了一种叫做word2vec的神经语言模型，通过神经网络模型来隐式地计算出词汇表中的每一个单词的向量化表示，这种表示方式能够很好地描述单词间的语义和语法关系，从而使得模型具有相当的泛化能力，因此该方法及其变形已经被广泛地应用到NLP领域的各个方面。<br>​        因此可以使用相似的方法来计算协助过滤中所有items的向量化表示，从而隐式地得到items间的相互关系，使得我们能够更好地计算出items间的相似性以及提升模型的泛化能力。</p>
+<h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><ul>
+<li>Item2Item的推荐方式效果显著</li>
+<li>NN model的特征抽象能力</li>
+<li>算法论文：ITEM2VEC： Neural Item Embedding For Collaborative Filtering</li>
+</ul>
+<h2 id="物理意义"><a href="#物理意义" class="headerlink" title="物理意义"></a>物理意义</h2><ul>
+<li>将用户的行为序列转化为item组成的句子</li>
+<li>模仿word2vec训练word embedding将item embedding</li>
+</ul>
+<h2 id="缺陷"><a href="#缺陷" class="headerlink" title="缺陷"></a>缺陷</h2><ul>
+<li>用户的行为序列时序性缺失</li>
+<li>用户行为序列中的item强度是无区分性的</li>
+</ul>
+<h2 id="Item2Vec算法应用主流程"><a href="#Item2Vec算法应用主流程" class="headerlink" title="Item2Vec算法应用主流程"></a>Item2Vec算法应用主流程</h2><ul>
+<li>从log中抽取用户行为序列（day级别等）</li>
+<li>将行为序列当成语料训练word2vec得到item embedding</li>
+<li>得到item sim关系用于推荐</li>
+</ul>
+<h2 id="Item2Vec算法依赖模型word2vec"><a href="#Item2Vec算法依赖模型word2vec" class="headerlink" title="Item2Vec算法依赖模型word2vec"></a>Item2Vec算法依赖模型word2vec</h2><h3 id="CBOW-continuous-bag-of-words"><a href="#CBOW-continuous-bag-of-words" class="headerlink" title="CBOW (continuous bag of words)"></a>CBOW (continuous bag of words)</h3><p>待补</p>
+<h3 id="Skip-gram模型"><a href="#Skip-gram模型" class="headerlink" title="Skip-gram模型"></a>Skip-gram模型</h3><p>待补</p>
+<h3 id="负采样算法"><a href="#负采样算法" class="headerlink" title="负采样算法"></a>负采样算法</h3><p>由于词在预料中出现的次数有高有低，对于高频词，被选为负样本的概率应该就比较高，因此本质上就是一个带权采样问题。</p>
+<img src="/2021/05/26/item2Vec/image-20210526192951653.png" alt="image-20210526192951653" style="zoom:67%;">
+
+<h1 id="算法实现"><a href="#算法实现" class="headerlink" title="算法实现"></a>算法实现</h1><ul>
+<li>获取用户点击序列</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">produce_train_data</span>(<span class="params">input_file, out_file</span>):</span></span><br><span class="line">    <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">    :param input_file: user behavior file</span></span><br><span class="line"><span class="string">    :param out_file: output file</span></span><br><span class="line"><span class="string">    &quot;&quot;&quot;</span></span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> os.path.exists(input_file):</span><br><span class="line">        <span class="keyword">return</span></span><br><span class="line">    record = &#123;&#125;</span><br><span class="line">    score_thr = <span class="number">4</span></span><br><span class="line">    linenum = <span class="number">0</span></span><br><span class="line">    fp = open(input_file)</span><br><span class="line">    <span class="keyword">for</span> line <span class="keyword">in</span> fp:</span><br><span class="line">        <span class="keyword">if</span> linenum == <span class="number">0</span>:</span><br><span class="line">            linenum += <span class="number">1</span></span><br><span class="line">            <span class="keyword">continue</span></span><br><span class="line">        item = line.strip().split(<span class="string">&#x27;,&#x27;</span>)</span><br><span class="line">        <span class="keyword">if</span> len(item) &lt; <span class="number">4</span>:</span><br><span class="line">            <span class="keyword">continue</span></span><br><span class="line">        userid, itemid, rating = item[<span class="number">0</span>], item[<span class="number">1</span>], float(item[<span class="number">2</span>])</span><br><span class="line">        <span class="keyword">if</span> rating &lt; score_thr:</span><br><span class="line">            <span class="keyword">continue</span></span><br><span class="line">        <span class="keyword">if</span> userid <span class="keyword">not</span> <span class="keyword">in</span> record:</span><br><span class="line">            record[userid] = []</span><br><span class="line">        record[userid].append(itemid)</span><br><span class="line">    fp.close()</span><br><span class="line">    fw = open(out_file, <span class="string">&quot;w+&quot;</span>)</span><br><span class="line">    <span class="keyword">for</span> userid <span class="keyword">in</span> record:</span><br><span class="line">        fw.write(<span class="string">&quot; &quot;</span>.join(record[userid]) + <span class="string">&quot;\n&quot;</span>)</span><br><span class="line">    fw.close()</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>将item序列喂给word2vec模型，得到item的embedding文件</li>
+<li>gensim 或 word2vec c版本</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">sentences = word2vec.LineSentence(<span class="string">&quot;../data/train_data.txt&quot;</span>)</span><br><span class="line">model = word2vec.Word2Vec(sentences, sg=<span class="number">1</span>, vector_size=<span class="number">128</span>, window=<span class="number">5</span>, sample=<span class="number">1e-3</span>, hs=<span class="number">0</span>, negative=<span class="number">5</span>, epochs=<span class="number">100</span>)</span><br><span class="line">model.wv.save_word2vec_format(<span class="string">&quot;../data/item_vec.txt&quot;</span>, binary=<span class="literal">False</span>)</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>计算item之间的相似性</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">load_item_vec</span>(<span class="params">input_file</span>):</span></span><br><span class="line">    <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">    :param input_file: item vec file</span></span><br><span class="line"><span class="string">    :return: dict key:itemid value:np.array([num1,num2...])</span></span><br><span class="line"><span class="string">    &quot;&quot;&quot;</span></span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> os.path.exists(input_file):</span><br><span class="line">        <span class="keyword">return</span> &#123;&#125;</span><br><span class="line">    linenum = <span class="number">0</span></span><br><span class="line">    item_vec = &#123;&#125;</span><br><span class="line">    fp = open(input_file)</span><br><span class="line">    <span class="keyword">for</span> line <span class="keyword">in</span> fp:</span><br><span class="line">        <span class="keyword">if</span> linenum == <span class="number">0</span>:</span><br><span class="line">            linenum += <span class="number">1</span></span><br><span class="line">            <span class="keyword">continue</span></span><br><span class="line">        item = line.strip().split()</span><br><span class="line">        <span class="keyword">if</span> len(item) &lt; <span class="number">129</span>:</span><br><span class="line">            <span class="keyword">continue</span></span><br><span class="line">        itemid = item[<span class="number">0</span>]</span><br><span class="line">        <span class="keyword">if</span> itemid == <span class="string">&quot;&lt;/s&gt;&quot;</span>:</span><br><span class="line">            <span class="keyword">continue</span></span><br><span class="line">        item_vec[itemid] = np.array([float(ele) <span class="keyword">for</span> ele <span class="keyword">in</span> item[<span class="number">1</span>:]])</span><br><span class="line">    fp.close()</span><br><span class="line">    <span class="keyword">return</span> item_vec</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">cal_item_sim</span>(<span class="params">item_vec, itemid, output_file</span>):</span></span><br><span class="line">    <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">    :param item_vec: item embedding vector</span></span><br><span class="line"><span class="string">    :param itemid: fixed itemid to clac item sim</span></span><br><span class="line"><span class="string">    :param output_file: the file to store result</span></span><br><span class="line"><span class="string">    &quot;&quot;&quot;</span></span><br><span class="line">    <span class="keyword">if</span> itemid <span class="keyword">not</span> <span class="keyword">in</span> item_vec:</span><br><span class="line">        <span class="keyword">return</span></span><br><span class="line">    score = &#123;&#125;</span><br><span class="line">    topk = <span class="number">10</span></span><br><span class="line">    fix_item_vec = item_vec[itemid]</span><br><span class="line">    <span class="keyword">for</span> tmp_itemid <span class="keyword">in</span> item_vec:</span><br><span class="line">        <span class="keyword">if</span> tmp_itemid == itemid:</span><br><span class="line">            <span class="keyword">continue</span></span><br><span class="line">        tmp_itemvec = item_vec[tmp_itemid]</span><br><span class="line">        fenmu = np.linalg.norm(fix_item_vec) * np.linalg.norm(tmp_itemvec)</span><br><span class="line">        <span class="keyword">if</span> fenmu == <span class="number">0</span>:</span><br><span class="line">            score[tmp_itemid] = <span class="number">0</span></span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            score[tmp_itemid] = round(np.dot(fix_item_vec, tmp_itemvec) / fenmu, <span class="number">3</span>)</span><br><span class="line"></span><br><span class="line">    fw = open(output_file, <span class="string">&quot;w+&quot;</span>)</span><br><span class="line">    out_str = itemid + <span class="string">&quot;\t&quot;</span></span><br><span class="line">    tmp_list = []</span><br><span class="line">    <span class="keyword">for</span> co <span class="keyword">in</span> sorted(score.items(), key=operator.itemgetter(<span class="number">1</span>), reverse=<span class="literal">True</span>)[:topk]:</span><br><span class="line">        tmp_list.append(co[<span class="number">0</span>] + <span class="string">&quot;_&quot;</span> + str(co[<span class="number">1</span>]))</span><br><span class="line">    out_str += <span class="string">&quot;;&quot;</span>.join(tmp_list)</span><br><span class="line">    fw.write(out_str + <span class="string">&quot;\n&quot;</span>)</span><br><span class="line">    fw.close()</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>编写shell脚本串联过程，使用spark等进行并行计算</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2021/05/17/Personal-Rank/" rel="prev" title="Personal_Rank">
+                  <i class="fa fa-chevron-left"></i> Personal_Rank
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+  
+  
+  
+
+
+
+      
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      const activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      const commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      
+
+      
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Fivelike</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/mist/" class="theme-link" rel="noopener" target="_blank">NexT.Mist</a>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="//cdn.jsdelivr.net/npm/animejs@3.2.0/lib/anime.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
